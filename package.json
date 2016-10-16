@@ -1,12 +1,16 @@
 {
-  "name"         : "node-web-scrape",
+  "name"         : "pk-subban-tracker",
   "version"      : "0.0.1",
-  "description"  : "Scrape le web.",
+  "description"  : "Track PK Subban",
   "main"         : "server.js",
-  "author"       : "Scotch",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author"       : "KCW",
   "repository"   : {
     "type" : "git",
-    "url"  : "https://github.com/scotch-io/node-web-scraper"
+    "url"  : "https://github.com/KaichenWang/PKSubbanTracker"
   },
   "dependencies" : {
     "express"    : "latest",
