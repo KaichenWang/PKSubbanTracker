@@ -18,7 +18,6 @@ app.get('/player/pksubban', function (req, res) {
             var i = 0;
 
             data.children().each(function () {
-                console.log($(this).text());
                 json[i] = $(this).text();
                 i++;
             });
@@ -38,7 +37,6 @@ app.get('/player/sheaweber', function (req, res) {
             var i = 0;
 
             data.children().each(function () {
-                console.log($(this).text());
                 json[i] = $(this).text();
                 i++;
             });
@@ -51,10 +49,14 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.listen(server_port, server_ip_address, function () {
+app.use(express.static('static'));
 
-    console.log( "Listening on " + server_ip_address + ", server_port " + server_port  );
+// app.listen(server_port, server_ip_address, function () {
+//
+//     console.log( "Listening on " + server_ip_address + ", server_port " + server_port  );
+//
+// });
 
-});
+app.listen('8081');
 
 exports = module.exports = app;
