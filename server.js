@@ -4,44 +4,33 @@ var request = require('request');
 var cheerio = require('cheerio');
 var app = express();
 var path = require('path');
+
+var cache = require('./cache');
+
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 app.get('/player/pksubban', function (req, res) {
-    url = 'http://www.nhl.com/player/p-k-subban-8474056';
+    url = 'http://www.hockeydb.com/ihdb/stats/pdisplay.php?pid=89716';
 
-    request(url, function (error, response, html) {
-        if (!error) {
-            var $ = cheerio.load(html);
-            var json = {};
-            var data = $('.season-summary__table-sm table tbody tr').first();
-            var i = 0;
-
-            data.children().each(function () {
-                json[i] = $(this).text();
-                i++;
-            });
+    cache.getStats(url, function(stats){
+        if(stats){
+            res.send(stats);
+        }else{
+            res.send("stats not found\n", 404)
         }
-        res.send(json);
     })
 })
 
 app.get('/player/sheaweber', function (req, res) {
-    url = 'http://www.nhl.com/player/shea-weber-8470642';
+    url = 'http://www.hockeydb.com/ihdb/stats/pdisplay.php?pid=62488';
 
-    request(url, function (error, response, html) {
-        if (!error) {
-            var $ = cheerio.load(html);
-            var json = {};
-            var data = $('.season-summary__table-sm table tbody tr').first();
-            var i = 0;
-
-            data.children().each(function () {
-                json[i] = $(this).text();
-                i++;
-            });
+    cache.getStats(url, function(stats){
+        if(stats){
+            res.send(stats);
+        }else{
+            res.send("stats not found\n", 404)
         }
-        res.send(json);
     })
 })
 
