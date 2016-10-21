@@ -21,7 +21,7 @@ exports.getStats = function(url, callback){
             scrape.scrapePage(url, function(stats){
                 client.multi()
                     .set(key, JSON.stringify(stats))
-                    .expire(key, 3600 * 2) // cache will last for two minutes
+                    .expire(key, 120) // cache will last for two minutes
                     .incr("expensive-hit")
                     .exec(function(err, replies){
                         callback(stats)
