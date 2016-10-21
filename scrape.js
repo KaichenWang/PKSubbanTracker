@@ -9,8 +9,14 @@ exports.scrapePage = function(url, callback){
             var data = $('table.st.reg tbody tr').last().children().eq(3);
 
             for (var j = 0; j<5; j++) {
-                json[j] = data.text();
-                data = data.next();
+                if (j == 4) {
+                    data = data.next();
+                    json[j] = data.text();
+                }
+                else {
+                    json[j] = data.text();
+                    data = data.next();
+                }
             }
         }
         callback(json);
