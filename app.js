@@ -8,14 +8,14 @@ var path = require('path');
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
-if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
-    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-        process.env.OPENSHIFT_APP_NAME;
-    config.db.mongo.url = connection_string;
-}
+// if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+//     connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+//         process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+//         process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+//         process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+//         process.env.OPENSHIFT_APP_NAME;
+//     config.db.mongo.url = connection_string;
+// }
 
 var mongoose = require('mongoose');
 var db = mongoose.connection;
@@ -86,6 +86,13 @@ app.get('/player/sheaweber', function (req, res) {
         res.json(obj[0].stats);
     })
 });
+
+var the_interval = 5000;
+setInterval(function() {
+    console.log("I am doing my 5 minutes check");
+    // do your stuff here
+}, the_interval);
+
 
 if (process.env.NODE_ENV === 'development') {
     app.listen('8081');
