@@ -7,7 +7,7 @@ exports.scrapePage = function(url, callback){
             var $ = cheerio.load(html);
             var json = {};
 
-            if(url.includes('89716') || url.includes('62488')) {
+            if(url.indexOf('89716') != -1 || url.indexOf('62488') != -1) {
                 var data = $('table.st.reg tbody tr').last().children();
                 json[0]= data.eq(3).text();
                 json[1]= data.eq(4).text();
@@ -15,7 +15,7 @@ exports.scrapePage = function(url, callback){
                 json[3]= data.eq(6).text();
                 json[4]= data.eq(8).text();
             }
-            else if (url.includes('6929') || url.includes('7024')) {
+            else {
                 var data = $('.sortable.ti tbody tr').last().children();
                 json[0]= data.eq(5).text();
                 json[1]= data.eq(6).text();
