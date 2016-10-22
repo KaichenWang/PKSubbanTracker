@@ -51,6 +51,4 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-app.listen('8081');
-
 exports = module.exports = app;
