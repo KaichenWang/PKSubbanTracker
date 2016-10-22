@@ -8,11 +8,18 @@ $(function(){
             $('#stats-subban tbody').append("<tr><td class='message' colspan='5'>Update in progress...<br>check back later</td></tr>");
         }
         else {
-            var tr;
-            tr = $('<tr/>');
-            $.each(json, function (key, data) {
-                tr.append("<td>" + data + "</td>");
-            });
+            var skaters = json.skaterData;
+            var data;
+            var tr = $('<tr/>');
+            for(var i = 0, length = skaters.length; i < length; i++) {
+                if(skaters[i].id == '8474056') {
+                    data = skaters[i].data;
+                }
+            }
+            data = data.split(',');
+            for (var i = 3; i < 8; i++){
+                tr.append(  "<td>" + data[i] + "</td>");
+            }
             $('#stats-subban tbody').append(tr);
         }
         $('#container-subban .loading').toggleClass('hidden');
@@ -30,11 +37,18 @@ $(function(){
             $('#stats-weber tbody').append("<tr><td class='message' colspan='5'>Update in progress...<br>check back later</td></tr>");
         }
         else {
-            var tr;
-            tr = $('<tr/>');
-            $.each(json, function (key, data) {
-                tr.append("<td>" + data + "</td>");
-            });
+            var skaters = json.skaterData;
+            var data;
+            var tr = $('<tr/>');
+            for(var i = 0, length = skaters.length; i < length; i++) {
+                if(skaters[i].id == '8470642') {
+                    data = skaters[i].data;
+                }
+            }
+            data = data.split(',');
+            for (var i = 3; i < 8; i++){
+                tr.append(  "<td>" + data[i] + "</td>");
+            }
             $('#stats-weber tbody').append(tr);
         }
         $('#container-weber .loading').toggleClass('hidden');
@@ -44,34 +58,34 @@ $(function(){
 
 $(function(){
     $.ajax({
-        url: '/team/mtl',
+        url: '/team',
         dataType: 'json',
         cache: false
     }).done(function(json){
         if (!$.isEmptyObject(json)) {
-            var nonRegLoss = parseInt(json[2]) + parseInt(json[3]);
-            var record = json[0]+'-'+json[1]+'-'+nonRegLoss;
-            var points = json[4];
+            var teams = json.standings['info-teams'][0]['team-standing'];
+            var dataMTL, dataNSH;
+            for (var i = 0, length = teams.length; i < length; i++) {
+                if (teams[i].$.id == '13') {
+                    dataMTL = teams[i].$;
+                }
+                else if (teams[i].$.id == '19') {
+                    dataNSH = teams[i].$;
+                }
+            }
+            var record = dataMTL.wins + '-' + dataMTL.losses + '-' + dataMTL.overtime;
+            var points = dataMTL.points;
             $('#stats-mtl .record').append(record);
             $('#stats-mtl .points').append(points);
-        }
-        $('#stats-mtl').toggleClass('hidden');
-    });
-});
 
-$(function(){
-    $.ajax({
-        url: '/team/nsh',
-        dataType: 'json',
-        cache: false
-    }).done(function(json){
-        if (!$.isEmptyObject(json)) {
-            var nonRegLoss = parseInt(json[2]) + parseInt(json[3]);
-            var record = json[0]+'-'+json[1]+'-'+nonRegLoss;
-            var points = json[4];
+            record = dataNSH.wins + '-' + dataNSH.losses + '-' + dataNSH.overtime;
+            points = dataNSH.points;
+
             $('#stats-nsh .record').append(record);
             $('#stats-nsh .points').append(points);
+
+            $('#stats-mtl').toggleClass('hidden');
+            $('#stats-nsh').toggleClass('hidden');
         }
-        $('#stats-nsh').toggleClass('hidden');
     });
 });
