@@ -27,6 +27,10 @@ exports.getStats = function(url, callback){
     var key = url;
 
     client.get(key, function(err, reply){
+        if(err) {
+            console.log('REDIS CLIENT ERROR: ' + err);
+            callback(err);
+        }
         if(reply){
             // use cache
             client.incr("cache-hit", function(e,r){ })
