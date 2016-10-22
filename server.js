@@ -34,6 +34,30 @@ app.get('/player/sheaweber', function (req, res) {
     })
 })
 
+app.get('/team/mtl', function (req, res) {
+    url = 'http://www.hockeydb.com/stte/montreal-canadiens-6929.html';
+
+    cache.getStats(url, function(stats){
+        if(stats){
+            res.send(stats);
+        }else{
+            res.send("stats not found\n", 404)
+        }
+    })
+})
+
+app.get('/team/nsh', function (req, res) {
+    url = 'http://www.hockeydb.com/stte/nashville-predators-7024.html';
+
+    cache.getStats(url, function(stats){
+        if(stats){
+            res.send(stats);
+        }else{
+            res.send("stats not found\n", 404)
+        }
+    })
+})
+
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });

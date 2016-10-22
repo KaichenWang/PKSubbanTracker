@@ -41,3 +41,37 @@ $(function(){
         $('#stats-weber').toggleClass('hidden');
     });
 });
+
+$(function(){
+    $.ajax({
+        url: '/team/mtl',
+        dataType: 'json',
+        cache: false
+    }).done(function(json){
+        if (!$.isEmptyObject(json)) {
+            var nonRegLoss = parseInt(json[2]) + parseInt(json[3]);
+            var record = json[0]+'-'+json[1]+'-'+nonRegLoss;
+            var points = json[4];
+            $('#stats-mtl .record').append(record);
+            $('#stats-mtl .points').append(points);
+        }
+        $('#stats-mtl').toggleClass('hidden');
+    });
+});
+
+$(function(){
+    $.ajax({
+        url: '/team/nsh',
+        dataType: 'json',
+        cache: false
+    }).done(function(json){
+        if (!$.isEmptyObject(json)) {
+            var nonRegLoss = parseInt(json[2]) + parseInt(json[3]);
+            var record = json[0]+'-'+json[1]+'-'+nonRegLoss;
+            var points = json[4];
+            $('#stats-nsh .record').append(record);
+            $('#stats-nsh .points').append(points);
+        }
+        $('#stats-nsh').toggleClass('hidden');
+    });
+});
