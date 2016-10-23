@@ -89,3 +89,48 @@ $(function(){
         }
     });
 });
+
+$(document).ready(function() {
+    console.log($('.qp_a:first input').is(":visible"));
+    $("#vote-subban").click(function(){
+        $('.qp_a:first input').prop("checked", true);
+        $('input[name=qp_b857477]').click();
+        $('.button.vote').toggleClass('hidden');
+        function getData() {
+            var percent = $('#qp_rp_0_857477').text();
+            if(percent != ''){
+                $('#percent-subban').html(percent);
+                $('#votes-subban').html($('#qp_rv_0_857477 div').text());
+                $('#results-subban').toggleClass('hidden');
+            };
+            var percent = $('#qp_rp_1_857477').text();
+            if(percent != ''){
+                $('#percent-weber').html(percent);
+                $('#votes-weber').html($('#qp_rv_1_857477 div').text());
+                $('#results-weber').toggleClass('hidden');
+            };
+        }
+        setTimeout(getData,500);
+    });
+
+    $("#vote-weber").click(function(){
+        $('.qp_a:last input').prop("checked", true);
+        $('input[name=qp_b857477]').click();
+        $('.button.vote').toggleClass('hidden');
+        function wait() {
+            var percent = $('#qp_rp_0_857477').text();
+            if(percent != ''){
+                $('#percent-subban').html(percent);
+                $('#votes-subban').html($('#qp_rv_0_857477 div').text());
+                $('#results-subban').toggleClass('hidden');
+            };
+            var percent = $('#qp_rp_1_857477').text();
+            if(percent != ''){
+                $('#percent-weber').html(percent);
+                $('#votes-weber').html($('#qp_rv_1_857477 div').text());
+                $('#results-weber').toggleClass('hidden');
+            };
+        }
+        setTimeout(wait,500);
+    });
+});
