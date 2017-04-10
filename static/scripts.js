@@ -1,58 +1,100 @@
+var weberStats = {};
+var subbanStats = {};
+var montrealStats = [
+    {
+        record: '',
+        points: ''
+    },
+    {
+        record: '',
+        points: ''
+    }
+];
+var nashvilleStats = [
+    {
+        record: '',
+        points: ''
+    },
+    {
+        record: '',
+        points: ''
+    }
+];
+
+function updateTable (data, $container) {
+    var $loader = $container.find('.loading');
+    var $table = $container.find('table.stats');
+
+    // show loader, hide current table row
+    $loader.removeClass('hidden');
+    $table .addClass('hidden');
+
+    // create new table row
+    var $tr = $('<tr/>')
+    var length = 0;
+    try {
+        length = Object.keys(data).length;
+    }
+    catch(err) {
+        console.log(err.message);
+    }
+
+    if (length > 5) {
+        for (var i = 2; i <= length; i++) {
+            $tr.append("<td>" + data["col_"+i] + "</td>");
+        }
+    }
+    else {
+        $tr.append('<td class="table-message" colspan="5">Data not found. The NHL is onto us...</td>');
+    }
+
+    // replace current tbody contents with new tr
+    $table.find('tbody').html($tr);
+
+    // hide loader, show updated table row
+    $loader.addClass('hidden');
+    $table.removeClass('hidden');
+};
+
+function updateTeam (data, $container) {
+    $container.find('.record').text(data.record);
+    $container.find('.status').text(data.points);
+};
+
+
 $(function(){
+    var $container = $('#container-subban');
+
     $.ajax({
         url: '/player/pksubban',
         dataType: 'json',
         cache: false
     }).done(function(json){
         if ($.isEmptyObject(json)){
-            $('#stats-subban tbody').append("<tr><td class='message' colspan='5'>Update in progress...<br>check back later</td></tr>");
+            updateTable({}, $container);
         }
         else {
-            var skaters = json.skaterData;
-            var data;
-            var tr = $('<tr/>');
-            for(var i = 0, length = skaters.length; i < length; i++) {
-                if(skaters[i].id == '8474056') {
-                    data = skaters[i].data;
-                }
-            }
-            data = data.split(',');
-            for (var i = 3; i < 8; i++){
-                tr.append(  "<td>" + data[i] + "</td>");
-            }
-            $('#stats-subban tbody').append(tr);
+            subbanStats = json;
+            updateTable(subbanStats[1], $container);
         }
-        $('#container-subban .loading').toggleClass('hidden');
-        $('#stats-subban').toggleClass('hidden');
     });
 });
 
 $(function(){
+    var $container = $('#container-weber');
+
     $.ajax({
         url: '/player/sheaweber',
         dataType: 'json',
         cache: false
     }).done(function(json){
         if ($.isEmptyObject(json)){
-            $('#stats-weber tbody').append("<tr><td class='message' colspan='5'>Update in progress...<br>check back later</td></tr>");
+            updateTable({}, $container);
         }
         else {
-            var skaters = json.skaterData;
-            var data;
-            var tr = $('<tr/>');
-            for(var i = 0, length = skaters.length; i < length; i++) {
-                if(skaters[i].id == '8470642') {
-                    data = skaters[i].data;
-                }
-            }
-            data = data.split(',');
-            for (var i = 3; i < 8; i++){
-                tr.append(  "<td>" + data[i] + "</td>");
-            }
-            $('#stats-weber tbody').append(tr);
+            weberStats = json;
+            updateTable(weberStats[1], $container);
         }
-        $('#container-weber .loading').toggleClass('hidden');
-        $('#stats-weber').toggleClass('hidden');
     });
 });
 
@@ -63,7 +105,7 @@ $(function(){
         cache: false
     }).done(function(json){
         if (!$.isEmptyObject(json)) {
-            var teams = json.standings['info-teams'][0]['team-standing'];
+            var teams = json.r2016.standings['info-teams'][0]['team-standing'];
             var dataMTL, dataNSH;
             for (var i = 0, length = teams.length; i < length; i++) {
                 if (teams[i].$.id == '13') {
@@ -73,64 +115,162 @@ $(function(){
                     dataNSH = teams[i].$;
                 }
             }
-            var record = dataMTL.wins + '-' + dataMTL.losses + '-' + dataMTL.overtime;
-            var points = dataMTL.points;
-            $('#stats-mtl .record').append(record);
-            $('#stats-mtl .points').append(points);
+            montrealStats[0].record = dataMTL.wins + '-' + dataMTL.losses + '-' + dataMTL.overtime;
+            montrealStats[0].points = dataMTL.points;
 
-            record = dataNSH.wins + '-' + dataNSH.losses + '-' + dataNSH.overtime;
-            points = dataNSH.points;
+            montrealStats[1].record = json.p2017.mtl.record;
+            montrealStats[1].points = json.p2017.mtl.round;
 
-            $('#stats-nsh .record').append(record);
-            $('#stats-nsh .points').append(points);
+            nashvilleStats[0].record = dataNSH.wins + '-' + dataNSH.losses + '-' + dataNSH.overtime;
+            nashvilleStats[0].points = dataNSH.points;
 
-            $('#stats-mtl').toggleClass('hidden');
-            $('#stats-nsh').toggleClass('hidden');
+            nashvilleStats[1].record = json.p2017.nsh.record;
+            nashvilleStats[1].points = json.p2017.nsh.round;
+
+            var $montrealContainer = $('#stats-mtl');
+            var $nashvilleContainer = $('#stats-nsh');
+
+            updateTeam(montrealStats[0], $montrealContainer);
+            updateTeam(nashvilleStats[0], $nashvilleContainer);
+
+            $montrealContainer.toggleClass('hidden');
+            $nashvilleContainer.toggleClass('hidden');
         }
     });
 });
 
-$(document).ready(function() {
-    console.log($('.qp_a:first input').is(":visible"));
-    $("#vote-subban").click(function(){
-        $('.qp_a:first input').prop("checked", true);
-        $('input[name=qp_b857477]').click();
-        $('.button.vote').toggleClass('hidden');
-        function getData() {
-            var percent = $('#qp_rp_0_857477').text();
-            if(percent != ''){
-                $('#percent-subban').html(percent);
-                $('#votes-subban').html($('#qp_rv_0_857477 div').text());
-                $('#results-subban').toggleClass('hidden');
-            };
-            var percent = $('#qp_rp_1_857477').text();
-            if(percent != ''){
-                $('#percent-weber').html(percent);
-                $('#votes-weber').html($('#qp_rv_1_857477 div').text());
-                $('#results-weber').toggleClass('hidden');
-            };
+var getPollResults = function() {
+    $.ajax({
+        url: '/poll',
+        dataType: 'json',
+        cache: false
+    }).done(function(json){
+        if (!$.isEmptyObject(json)) {
+            var choices = json.demand[0].result.answers.answer;
+            var votesSubban = choices[0].total;
+            var percentSubban = choices[0].percent;
+            percentSubban = Math.round(percentSubban.toFixed(2));
+            var votesWeber = choices[1].total;
+            $('#percent-subban').html(percentSubban);
+            $('#votes-subban').html(votesSubban);
+            $('#percent-weber').html(100 - percentSubban);
+            $('#votes-weber').html(votesWeber);
         }
-        setTimeout(getData,500);
+    });
+}
+getPollResults();
+
+var messageIsVisible = false;
+
+var showMessage = function(msgClass, msg) {
+    $('.wrapper').animate({
+        scrollTop: 0
+    }, 200);
+    if(!messageIsVisible) {
+        messageIsVisible = true;
+        $('.message').toggleClass(msgClass);
+        $('.message h4').text(msg);
+        $('.message').toggleClass('show');
+        function wait() {
+            $('.message').toggleClass('show');
+            $('.message').toggleClass(msgClass)
+            $('.message h4').text('');
+            messageIsVisible = false;
+        }
+        setTimeout(wait, 2000);
+    }
+}
+
+var canVote;
+function checkCookie() {
+    var status = '';
+    if (document.cookie && document.cookie.indexOf('PD_poll_9559362') != -1) {
+        canVote = false;
+    } else {
+        canVote = true;
+    }
+}
+checkCookie();
+
+var commentClickable = true;
+$(".trigger-comments").click(function() {
+    var trigger = $(this);
+    if (commentClickable) {
+        commentClickable = false;
+        if (trigger.is('#close-comments')) {
+            function wait() {
+                $('#page-1').addClass('hidden');
+            }
+            setTimeout(wait, 500);
+        }
+        else {
+            $('#page-1').removeClass('hidden');
+        }
+        $('#page-1').toggleClass('slide-in');
+        $('#page-1').toggleClass('slide-out');
+        commentClickable = true;
+    }
+});
+
+$(document).ready(function() {
+    $("#vote-subban").click(function(){
+        if(canVote) {
+            canVote = false;
+            $('#PDI_answer43654459').prop("checked", true);
+            PD_prevote9559362(1);
+            var votesSubban = parseInt($('#votes-subban').text()) + 1;
+            var votesWeber = parseInt($('#votes-weber').text());
+            var percentWeber = Math.round((votesWeber/(votesWeber+votesSubban))*100);
+            var percentSubban = 100 - percentWeber;
+            $('#votes-subban').text(votesSubban);
+            $('#votes-weber').text(votesWeber);
+            $('#percent-subban').text(percentSubban);
+            $('#percent-weber').text(percentWeber);
+            showMessage('success', '+1 vote for PK Subban');
+        }
+        else {
+            showMessage('error', "Sorry, you've already voted");
+        }
     });
 
     $("#vote-weber").click(function(){
-        $('.qp_a:last input').prop("checked", true);
-        $('input[name=qp_b857477]').click();
-        $('.button.vote').toggleClass('hidden');
-        function wait() {
-            var percent = $('#qp_rp_0_857477').text();
-            if(percent != ''){
-                $('#percent-subban').html(percent);
-                $('#votes-subban').html($('#qp_rv_0_857477 div').text());
-                $('#results-subban').toggleClass('hidden');
-            };
-            var percent = $('#qp_rp_1_857477').text();
-            if(percent != ''){
-                $('#percent-weber').html(percent);
-                $('#votes-weber').html($('#qp_rv_1_857477 div').text());
-                $('#results-weber').toggleClass('hidden');
-            };
+        if(canVote) {
+            canVote = false;
+            $('#PDI_answer43654460').prop("checked", true);
+            PD_prevote9559362(1);
+            var votesSubban = parseInt($('#votes-subban').text());
+            var votesWeber = parseInt($('#votes-weber').text()) + 1;
+            var percentWeber = Math.round((votesWeber/(votesWeber+votesSubban))*100);
+            var percentSubban = 100 - percentWeber;
+            $('#votes-subban').text(votesSubban);
+            $('#votes-weber').text(votesWeber);
+            $('#percent-subban').text(percentSubban);
+            $('#percent-weber').text(percentWeber);
+            showMessage('success', '+1 vote for Shea Weber');
         }
-        setTimeout(wait,500);
+        else {
+            showMessage('error', "Sorry, you've already voted");
+        }
     });
+});
+
+$('.select-season').change(function() {
+    var $containerSubban = $('#container-subban');
+    var $containerWeber = $('#container-weber');
+    var $montrealContainer = $('#stats-mtl');
+    var $nashvilleContainer = $('#stats-nsh');
+
+    var val = $(this).val();
+    if (val === 'p2017') {
+        updateTable(subbanStats[0], $containerSubban);
+        updateTable(weberStats[0], $containerWeber);
+        updateTeam(montrealStats[1], $montrealContainer);
+        updateTeam(nashvilleStats[1], $nashvilleContainer);
+    }
+    else if (val === 'r2016') {
+        updateTable(subbanStats[1], $containerSubban);
+        updateTable(weberStats[1], $containerWeber);
+        updateTeam(montrealStats[0], $montrealContainer);
+        updateTeam(nashvilleStats[0], $nashvilleContainer);
+    }
 });
