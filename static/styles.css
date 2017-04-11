@@ -527,12 +527,12 @@ table td {
         color: gray;
         border-bottom: 1px solid #2e2e2e;
         padding: 10px 45px 10px 15px;
-        font-size: 0.8em;
+        font-size: 1em;
     }
 
     .container {
         width: 100%;
-        height: calc(50% - 37px / 2);
+        height: calc(50% - 40px / 2);
         min-height: 275px;
     }
 
