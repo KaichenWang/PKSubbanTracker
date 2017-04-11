@@ -1,100 +1,56 @@
-var weberStats = {};
-var subbanStats = {};
-var montrealStats = [
-    {
-        record: '',
-        points: ''
-    },
-    {
-        record: '',
-        points: ''
-    }
-];
-var nashvilleStats = [
-    {
-        record: '',
-        points: ''
-    },
-    {
-        record: '',
-        points: ''
-    }
-];
-
-function updateTable (data, $container) {
-    var $loader = $container.find('.loading');
-    var $table = $container.find('table.stats');
-
-    // show loader, hide current table row
-    $loader.removeClass('hidden');
-    $table .addClass('hidden');
-
-    // create new table row
-    var $tr = $('<tr/>')
-    var length = 0;
-    try {
-        length = Object.keys(data).length;
-    }
-    catch(err) {
-        console.log(err.message);
-    }
-
-    if (length > 5) {
-        for (var i = 2; i <= length; i++) {
-            $tr.append("<td>" + data["col_"+i] + "</td>");
-        }
-    }
-    else {
-        $tr.append('<td class="table-message" colspan="5">Data not found. The NHL is onto us...</td>');
-    }
-
-    // replace current tbody contents with new tr
-    $table.find('tbody').html($tr);
-
-    // hide loader, show updated table row
-    $loader.addClass('hidden');
-    $table.removeClass('hidden');
-};
-
-function updateTeam (data, $container) {
-    $container.find('.record').text(data.record);
-    $container.find('.status').text(data.points);
-};
-
-
 $(function(){
-    var $container = $('#container-subban');
-
     $.ajax({
         url: '/player/pksubban',
         dataType: 'json',
         cache: false
     }).done(function(json){
         if ($.isEmptyObject(json)){
-            updateTable({}, $container);
+            $('#stats-subban tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
         }
         else {
-            subbanStats = json;
-            updateTable(subbanStats[1], $container);
+            var data = json.playerCard["playerCard-row"][0].$;
+            var tr = $('<tr/>');
+            var length = Object.keys(data).length;
+            if (length > 5) {
+                for (var i = 2; i <= length; i++) {
+                   tr.append("<td>" + data["col_"+i] + "</td>");
+                }
+                $('#stats-subban tbody').append(tr);
+            }
+            else {
+                $('#stats-subban tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
+            }
         }
+        $('#container-subban .loading').toggleClass('hidden');
+        $('#stats-subban').toggleClass('hidden');
     });
 });
 
 $(function(){
-    var $container = $('#container-weber');
-
     $.ajax({
         url: '/player/sheaweber',
         dataType: 'json',
         cache: false
     }).done(function(json){
         if ($.isEmptyObject(json)){
-            updateTable({}, $container);
+            $('#stats-weber tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
         }
         else {
-            weberStats = json;
-            updateTable(weberStats[1], $container);
+            var data = json.playerCard["playerCard-row"][0].$;
+            var tr = $('<tr/>');
+            var length = Object.keys(data).length;
+            if (length > 5) {
+                for (var i = 2; i <= length; i++) {
+                    tr.append("<td>" + data["col_"+i] + "</td>");
+                }
+                $('#stats-weber tbody').append(tr);
+            }
+            else {
+                $('#stats-weber tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
+            }
         }
+        $('#container-weber .loading').toggleClass('hidden');
+        $('#stats-weber').toggleClass('hidden');
     });
 });
 
@@ -105,7 +61,7 @@ $(function(){
         cache: false
     }).done(function(json){
         if (!$.isEmptyObject(json)) {
-            var teams = json.r2016.standings['info-teams'][0]['team-standing'];
+            var teams = json.standings['info-teams'][0]['team-standing'];
             var dataMTL, dataNSH;
             for (var i = 0, length = teams.length; i < length; i++) {
                 if (teams[i].$.id == '13') {
@@ -115,26 +71,19 @@ $(function(){
                     dataNSH = teams[i].$;
                 }
             }
-            montrealStats[0].record = dataMTL.wins + '-' + dataMTL.losses + '-' + dataMTL.overtime;
-            montrealStats[0].points = dataMTL.points;
+            var record = dataMTL.wins + '-' + dataMTL.losses + '-' + dataMTL.overtime;
+            var points = dataMTL.points;
+            $('#stats-mtl .record').append(record);
+            $('#stats-mtl .points').append(points);
 
-            montrealStats[1].record = json.p2017.mtl.record;
-            montrealStats[1].points = json.p2017.mtl.round;
+            record = dataNSH.wins + '-' + dataNSH.losses + '-' + dataNSH.overtime;
+            points = dataNSH.points;
 
-            nashvilleStats[0].record = dataNSH.wins + '-' + dataNSH.losses + '-' + dataNSH.overtime;
-            nashvilleStats[0].points = dataNSH.points;
+            $('#stats-nsh .record').append(record);
+            $('#stats-nsh .points').append(points);
 
-            nashvilleStats[1].record = json.p2017.nsh.record;
-            nashvilleStats[1].points = json.p2017.nsh.round;
-
-            var $montrealContainer = $('#stats-mtl');
-            var $nashvilleContainer = $('#stats-nsh');
-
-            updateTeam(montrealStats[0], $montrealContainer);
-            updateTeam(nashvilleStats[0], $nashvilleContainer);
-
-            $montrealContainer.toggleClass('hidden');
-            $nashvilleContainer.toggleClass('hidden');
+            $('#stats-mtl').toggleClass('hidden');
+            $('#stats-nsh').toggleClass('hidden');
         }
     });
 });
@@ -252,25 +201,4 @@ $(document).ready(function() {
             showMessage('error', "Sorry, you've already voted");
         }
     });
-});
-
-$('.select-season').change(function() {
-    var $containerSubban = $('#container-subban');
-    var $containerWeber = $('#container-weber');
-    var $montrealContainer = $('#stats-mtl');
-    var $nashvilleContainer = $('#stats-nsh');
-
-    var val = $(this).val();
-    if (val === 'p2017') {
-        updateTable(subbanStats[0], $containerSubban);
-        updateTable(weberStats[0], $containerWeber);
-        updateTeam(montrealStats[1], $montrealContainer);
-        updateTeam(nashvilleStats[1], $nashvilleContainer);
-    }
-    else if (val === 'r2016') {
-        updateTable(subbanStats[1], $containerSubban);
-        updateTable(weberStats[1], $containerWeber);
-        updateTeam(montrealStats[0], $montrealContainer);
-        updateTeam(nashvilleStats[0], $nashvilleContainer);
-    }
 });

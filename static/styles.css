@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'PKSubbanTracker';
-    src:  url('PKSubbanTracker.eot?ccshiy');
-    src:  url('PKSubbanTracker.eot?ccshiy#iefix') format('embedded-opentype'),
-    url('PKSubbanTracker.ttf?ccshiy') format('truetype'),
-    url('PKSubbanTracker.woff?ccshiy') format('woff'),
-    url('PKSubbanTracker.svg?ccshiy#PKSubbanTracker') format('svg');
+    src:  url('PKSubbanTracker.eot?mghz26');
+    src:  url('PKSubbanTracker.eot?mghz26#iefix') format('embedded-opentype'),
+    url('PKSubbanTracker.ttf?mghz26') format('truetype'),
+    url('PKSubbanTracker.woff?mghz26') format('woff'),
+    url('PKSubbanTracker.svg?mghz26#PKSubbanTracker') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -24,11 +24,38 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-close:before {
-    content: "\e905";
+.icon-comments:before {
+    content: "\e906";
 }
 .icon-code:before {
     content: "\e902";
+}
+.icon-clock:before {
+    content: "\e94e";
+}
+.icon-up:before {
+    content: "\ea50";
+}
+.icon-right:before {
+    content: "\ea51";
+}
+.icon-left:before {
+    content: "\ea52";
+}
+.icon-down:before {
+    content: "\ea53";
+}
+.icon-close:before {
+    content: "\e905";
+}
+.icon-like-left:before {
+    content: "\e901";
+}
+.icon-like:before {
+    content: "\e900";
+}
+.icon-paperplane:before {
+    content: "\e904";
 }
 .icon-bubble:before {
     content: "\e903";
@@ -64,6 +91,40 @@ h2 {
 
 body {
     white-space: nowrap;
+}
+
+.season {
+    top: 5px;
+}
+
+.select-wrapper {
+    display: inline-block;
+    position: relative;
+}
+
+.select-wrapper .icon-down {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    font-size: 0.75em;
+    pointer-events: none;
+}
+
+select {
+    font-family: 'Electrolize', sans-serif;
+    color: white;
+    font-size: 1.5em;
+    background-color: rgba(0, 0, 0, 0.8);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 8px 35px 8px 10px;
+    font-size: 0.8em;
+    outline:none;
+    border-radius: 0;
+    border: 0;
 }
 
 .container {
@@ -378,9 +439,44 @@ table td {
     table td {
         min-width: 45px;
     }
+
+    .season {
+        top: 5px;
+    }
+
+    .season select {
+        font-size: 0.7em;
+        padding: 6px 30px 6px 10px;
+    }
+
+    .select-wrapper .icon-down {
+        right: 10px;
+        font-size: 0.5em;
+    }
 }
 
 @media only screen and (min-width : 601px) {
+    .wrapper {
+        min-height: 400px;
+    }
+
+    .season {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        border: 1px solid gray;
+        overflow: hidden;
+    }
+
+    #stats-mtl {
+        padding-left: 80px;
+    }
+
+    #stats-nsh {
+        padding-right: 80px;
+    }
+
     #open-comments {
         left: 50%;
         right: auto;
@@ -413,9 +509,30 @@ table td {
 }
 
 @media only screen and (max-width : 600px) {
+    .season {
+        background: black;
+    }
+
+    .season .select-wrapper, .season select {
+        width: 100%;
+    }
+
+    .select-wrapper .icon-down {
+        right: 15px;
+        font-size: 0.75em;
+    }
+
+    .season select {
+        background: black;
+        color: gray;
+        border-bottom: 1px solid #2e2e2e;
+        padding: 10px 45px 10px 15px;
+        font-size: 0.8em;
+    }
+
     .container {
         width: 100%;
-        height: 50%;
+        height: calc(50% - 37px / 2);
         min-height: 275px;
     }
 
