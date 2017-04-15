@@ -1,93 +1,3 @@
-// $(function(){
-//     $.ajax({
-//         url: '/player/pksubban',
-//         dataType: 'json',
-//         cache: false
-//     }).done(function(json){
-//         if ($.isEmptyObject(json)){
-//             $('#stats-subban tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
-//         }
-//         else {
-//             var data = json.playerCard["playerCard-row"][0].$;
-//             var tr = $('<tr/>');
-//             var length = Object.keys(data).length;
-//             if (length > 5) {
-//                 for (var i = 2; i <= length; i++) {
-//                    tr.append("<td>" + data["col_"+i] + "</td>");
-//                 }
-//                 $('#stats-subban tbody').append(tr);
-//             }
-//             else {
-//                 $('#stats-subban tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
-//             }
-//         }
-//         $('#container-subban .loading').toggleClass('hidden');
-//         $('#stats-subban').toggleClass('hidden');
-//     });
-// });
-//
-// $(function(){
-//     $.ajax({
-//         url: '/player/sheaweber',
-//         dataType: 'json',
-//         cache: false
-//     }).done(function(json){
-//         if ($.isEmptyObject(json)){
-//             $('#stats-weber tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
-//         }
-//         else {
-//             var data = json.playerCard["playerCard-row"][0].$;
-//             var tr = $('<tr/>');
-//             var length = Object.keys(data).length;
-//             if (length > 5) {
-//                 for (var i = 2; i <= length; i++) {
-//                     tr.append("<td>" + data["col_"+i] + "</td>");
-//                 }
-//                 $('#stats-weber tbody').append(tr);
-//             }
-//             else {
-//                 $('#stats-weber tbody').append("<tr><td class='table-message' colspan='5'>Data not found. The NHL is onto us...</td></tr>");
-//             }
-//         }
-//         $('#container-weber .loading').toggleClass('hidden');
-//         $('#stats-weber').toggleClass('hidden');
-//     });
-// });
-//
-// $(function(){
-//     $.ajax({
-//         url: '/team',
-//         dataType: 'json',
-//         cache: false
-//     }).done(function(json){
-//         if (!$.isEmptyObject(json)) {
-//             var teams = json.standings['info-teams'][0]['team-standing'];
-//             var dataMTL, dataNSH;
-//             for (var i = 0, length = teams.length; i < length; i++) {
-//                 if (teams[i].$.id == '13') {
-//                     dataMTL = teams[i].$;
-//                 }
-//                 else if (teams[i].$.id == '19') {
-//                     dataNSH = teams[i].$;
-//                 }
-//             }
-//             var record = dataMTL.wins + '-' + dataMTL.losses + '-' + dataMTL.overtime;
-//             var points = dataMTL.points;
-//             $('#stats-mtl .record').append(record);
-//             $('#stats-mtl .points').append(points);
-//
-//             record = dataNSH.wins + '-' + dataNSH.losses + '-' + dataNSH.overtime;
-//             points = dataNSH.points;
-//
-//             $('#stats-nsh .record').append(record);
-//             $('#stats-nsh .points').append(points);
-//
-//             $('#stats-mtl').toggleClass('hidden');
-//             $('#stats-nsh').toggleClass('hidden');
-//         }
-//     });
-// });
-
 var getPollResults = function() {
     $.ajax({
         url: '/poll',
@@ -209,12 +119,12 @@ function StatsModel() {
             id : 'p2017',
             name :  'PLAYOFFS 2017',
             subban : {
-                stats: [0, 0, 0, 0, 0],
-                team: ['0-0', '1ST RND']
+                stats: [1, 0, 0, 0, 1],
+                team: ['1-0', '1ST RND']
             },
             weber : {
-                stats: [0, 0, 0, 0, 0],
-                team: ['0-0', '1ST RND']
+                stats: [1, 0, 0, 0, 0],
+                team: ['0-1', '1ST RND']
             }
         },
         {
