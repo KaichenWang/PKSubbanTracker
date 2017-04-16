@@ -113,29 +113,54 @@ $(document).ready(function() {
     });
 });
 
+
+function mapStatsToArray (object) {
+    var array = [];
+    for (var key in object) {
+        if (key !== 'col_1') {
+            array.push(object[key]);
+        }
+    }
+    return array;
+}
+
+function parseData (json) {
+    var playerData = [
+        {
+            id: 'p2017',
+            data: mapStatsToArray(json.playerCard["playerCard-row"][1].$)
+        },
+        {
+            id: 'r2016',
+            data: mapStatsToArray(json.playerCard["playerCard-row"][0].$)
+        }
+    ]
+    return playerData;
+}
+
 function StatsModel() {
     this.seasons = [
         {
             id : 'p2017',
             name :  'PLAYOFFS 2017',
             subban : {
-                stats: [1, 0, 0, 0, 1],
+                stats: [],
                 team: ['1-0', '1ST RND']
             },
             weber : {
-                stats: [1, 0, 0, 0, 0],
-                team: ['0-1', '1ST RND']
+                stats: [],
+                team: ['1-1', '1ST RND']
             }
         },
         {
             id : 'r2016',
             name :  'REG. SEASON 2016-2017',
             subban : {
-                stats: [66, 10, 30, 40, -8],
+                stats: [],
                 team: ['41-29-12', '94 PTS']
             },
             weber : {
-                stats: [78, 17, 25, 42, 20],
+                stats: [],
                 team: ['47-26-9', '103 PTS']
             }
         }
@@ -143,4 +168,54 @@ function StatsModel() {
     this.selectedSeason = ko.observable();
 }
 
-ko.applyBindings(new StatsModel());
+var dataLoaded = false;
+var stats = new StatsModel();
+
+$(function(){
+    $.ajax({
+        url: '/player/pksubban',
+        dataType: 'json',
+        cache: false
+    }).done(function(json){
+        var playerData = parseData(json);
+        stats.seasons[0].subban.stats=playerData[0].data;
+        stats.seasons[1].subban.stats=playerData[1].data;
+        if (dataLoaded) {
+            ko.applyBindings(stats);
+        }
+        else {
+            dataLoaded = true;
+        }
+    });
+});
+
+$(function(){
+    $.ajax({
+        url: '/player/sheaweber',
+        dataType: 'json',
+        cache: false
+    }).done(function(json){
+        var playerData = parseData(json);
+        stats.seasons[0].weber.stats=playerData[0].data;
+        stats.seasons[1].weber.stats=playerData[1].data;
+        if (dataLoaded) {
+            ko.applyBindings(stats);
+        }
+        else {
+            dataLoaded = true;
+        }
+    });
+});
+
+
+// function Data () {
+//     var self = this;
+//
+//     self.seasons = [{}];
+//     self.selectedSeason = '';
+//
+//     return self;
+// }
+//
+// var dataModel = ko.mapping.fromJS(new Data());
+
