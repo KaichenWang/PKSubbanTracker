@@ -53,8 +53,8 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
     <section class="container" id="container-subban">
         <div class="content">
             <h2>P.K. Subban</h2>
-            <img class="loading hidden" src="loading.gif">
-            <table class="stats" id="stats-subban" data-bind="with: selectedSeason">
+            <img class="loading" data-bind="css: {'hidden': selectedSeason().subban.stats.length }" src="loading.gif">
+            <table class="stats hidden" id="stats-subban" data-bind="with: selectedSeason, css: {'hidden': !selectedSeason().subban.stats.length }">
                 <thead>
                     <td>GP</td>
                     <td>G</td>
@@ -86,8 +86,8 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
     <section class="container" id="container-weber">
         <div class="content">
             <h2>Shea Weber</h2>
-            <img class="loading hidden" src="loading.gif">
-            <table class="stats" id="stats-weber" data-bind="with: selectedSeason">
+            <img data-bind="css: {'hidden': selectedSeason().weber.stats.length }" class="loading" src="loading.gif">
+            <table class="stats hidden" id="stats-weber" data-bind="with: selectedSeason, css: {'hidden': !selectedSeason().weber.stats.length }">
                 <thead>
                     <td>GP</td>
                     <td>G</td>

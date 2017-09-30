@@ -6,7 +6,7 @@ var path = require('path');
 var parseString = require('xml2js').parseString;
 
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
 app.get('/player/pksubban', function (req, res) {
     var url = 'http://www.tsn.ca/mobile/bbcard.aspx?hub=NHL&name=PK+SUBBAN';

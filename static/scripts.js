@@ -145,11 +145,11 @@ function StatsModel() {
             name :  'PLAYOFFS 2017',
             subban : {
                 stats: [],
-                team: ['1-0', '1ST RND']
+                team: ['Loading', 'CUP FINAL']
             },
             weber : {
                 stats: [],
-                team: ['1-1', '1ST RND']
+                team: ['Loading', '1ST RND (ELIM.)']
             }
         },
         {
@@ -168,54 +168,54 @@ function StatsModel() {
     this.selectedSeason = ko.observable();
 }
 
-var dataLoaded = false;
+var dataLoaded = 0;
 var stats = new StatsModel();
 
-$(function(){
-    $.ajax({
-        url: '/player/pksubban',
-        dataType: 'json',
-        cache: false
-    }).done(function(json){
-        var playerData = parseData(json);
-        stats.seasons[0].subban.stats=playerData[0].data;
-        stats.seasons[1].subban.stats=playerData[1].data;
-        if (dataLoaded) {
-            ko.applyBindings(stats);
-        }
-        else {
-            dataLoaded = true;
-        }
-    });
+$.ajax({
+    url: '/player/pksubban',
+    dataType: 'json',
+    cache: false
+}).done(function(json){
+    var playerData = parseData(json);
+    stats.seasons[0].subban.stats=playerData[0].data;
+    stats.seasons[1].subban.stats=playerData[1].data;
+    if (dataLoaded === 2) {
+        ko.applyBindings(stats);
+    }
+    else {
+        dataLoaded++;
+    }
 });
 
-$(function(){
-    $.ajax({
-        url: '/player/sheaweber',
-        dataType: 'json',
-        cache: false
-    }).done(function(json){
-        var playerData = parseData(json);
-        stats.seasons[0].weber.stats=playerData[0].data;
-        stats.seasons[1].weber.stats=playerData[1].data;
-        if (dataLoaded) {
-            ko.applyBindings(stats);
-        }
-        else {
-            dataLoaded = true;
-        }
-    });
+$.ajax({
+    url: '/player/sheaweber',
+    dataType: 'json',
+    cache: false
+}).done(function(json){
+    var playerData = parseData(json);
+    stats.seasons[0].weber.stats=playerData[0].data;
+    stats.seasons[1].weber.stats=playerData[1].data;
+    if (dataLoaded === 2) {
+        ko.applyBindings(stats);
+    }
+    else {
+        dataLoaded++;
+    }
 });
 
-
-// function Data () {
-//     var self = this;
-//
-//     self.seasons = [{}];
-//     self.selectedSeason = '';
-//
-//     return self;
-// }
-//
-// var dataModel = ko.mapping.fromJS(new Data());
-
+$.ajax({
+    url: 'https://statsapi.web.nhl.com/api/v1/tournaments/playoffs?season=20162017&expand=round.series&site=en_nhlCA',
+    dataType: 'json',
+    cache: false
+}).done(function(json){
+    var mtlRecord = json.rounds[0].series[0].matchupTeams[0].seriesRecord;
+    var nshRecord = json.rounds[3].series[0].matchupTeams[1].seriesRecord;
+    stats.seasons[0].subban.team[0] = nshRecord.wins+'-'+nshRecord.losses;
+    stats.seasons[0].weber.team[0] = mtlRecord.wins+'-'+mtlRecord.losses;
+    if (dataLoaded === 2) {
+        ko.applyBindings(stats);
+    }
+    else {
+        dataLoaded++;
+    }
+});
