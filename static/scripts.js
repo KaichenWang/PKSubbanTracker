@@ -113,54 +113,43 @@ $(document).ready(function() {
     });
 });
 
-
-function mapStatsToArray (object) {
-    var array = [];
-    for (var key in object) {
-        if (key !== 'col_1') {
-            array.push(object[key]);
-        }
-    }
-    return array;
-}
-
-function parseData (json) {
-    var playerData = [
-        {
-            id: 'p2017',
-            data: mapStatsToArray(json.playerCard["playerCard-row"][1].$)
-        },
-        {
-            id: 'r2016',
-            data: mapStatsToArray(json.playerCard["playerCard-row"][0].$)
-        }
-    ]
-    return playerData;
-}
+// Stats
 
 function StatsModel() {
     this.seasons = [
         {
-            id : 'p2017',
-            name :  'PLAYOFFS 2017',
+            id : 'r2018',
+            name :  'REG. SEASON 2017-2018',
             subban : {
                 stats: [],
-                team: ['Loading', 'CUP FINAL']
+                team: ['', '']
             },
             weber : {
                 stats: [],
-                team: ['Loading', '1ST RND (ELIM.)']
+                team: ['', '']
+            }
+        },
+        {
+            id : 'p2017',
+            name :  'PLAYOFFS 2017',
+            subban : {
+                stats: [22,2,10,12,5],
+                team: ['2-4', 'CUP FINAL']
+            },
+            weber : {
+                stats: [6,1,2,3,1],
+                team: ['2-4', '1ST RND']
             }
         },
         {
             id : 'r2016',
             name :  'REG. SEASON 2016-2017',
             subban : {
-                stats: [],
+                stats: [66,10,30,40,-8],
                 team: ['41-29-12', '94 PTS']
             },
             weber : {
-                stats: [],
+                stats: [78,17,25,42,20],
                 team: ['47-26-9', '103 PTS']
             }
         }
@@ -171,51 +160,45 @@ function StatsModel() {
 var dataLoaded = 0;
 var stats = new StatsModel();
 
-$.ajax({
-    url: '/player/pksubban',
-    dataType: 'json',
-    cache: false
-}).done(function(json){
-    var playerData = parseData(json);
-    stats.seasons[0].subban.stats=playerData[0].data;
-    stats.seasons[1].subban.stats=playerData[1].data;
-    if (dataLoaded === 2) {
-        ko.applyBindings(stats);
-    }
-    else {
-        dataLoaded++;
-    }
+var DATA_URL_SUBBAN_REGULAR = 'https://statsapi.web.nhl.com/api/v1/people/8474056?expand=person.stats&stats=yearByYear&site=en_nhlCA';
+var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642');
+var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs&site=en_nhlCA';
+var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
+
+$.when(
+    fetch (DATA_URL_SUBBAN_REGULAR),
+    fetch (DATA_URL_WEBER_REGULAR)
+).done(function(a1, a2){
+    stats.seasons[0].subban.stats = mapPlayerDataToArray(a1);
+    stats.seasons[0].weber.stats = mapPlayerDataToArray(a2);
+    ko.applyBindings(stats);
+
 });
 
-$.ajax({
-    url: '/player/sheaweber',
-    dataType: 'json',
-    cache: false
-}).done(function(json){
-    var playerData = parseData(json);
-    stats.seasons[0].weber.stats=playerData[0].data;
-    stats.seasons[1].weber.stats=playerData[1].data;
-    if (dataLoaded === 2) {
-        ko.applyBindings(stats);
-    }
-    else {
-        dataLoaded++;
-    }
-});
+// Helpers
 
-$.ajax({
-    url: 'https://statsapi.web.nhl.com/api/v1/tournaments/playoffs?season=20162017&expand=round.series&site=en_nhlCA',
-    dataType: 'json',
-    cache: false
-}).done(function(json){
-    var mtlRecord = json.rounds[0].series[0].matchupTeams[0].seriesRecord;
-    var nshRecord = json.rounds[3].series[0].matchupTeams[1].seriesRecord;
-    stats.seasons[0].subban.team[0] = nshRecord.wins+'-'+nshRecord.losses;
-    stats.seasons[0].weber.team[0] = mtlRecord.wins+'-'+mtlRecord.losses;
-    if (dataLoaded === 2) {
-        ko.applyBindings(stats);
+function fetch (url) {
+    return $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json'
+    });
+}
+
+function mapPlayerDataToArray (json) {
+    var seasons = json[0].people[0].stats[0].splits;
+    var i = seasons.length - 1;
+    var cur = seasons[i];
+    while(cur.league.name !== "National Hockey League") {
+        cur = seasons[i - 1];
+        i--;
     }
-    else {
-        dataLoaded++;
-    }
-});
+    cur = cur.stat;
+    return [
+        cur.games,
+        cur.goals,
+        cur.assists,
+        cur.points,
+        cur.plusMinus
+    ]
+}
