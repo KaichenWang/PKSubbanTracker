@@ -118,6 +118,18 @@ $(document).ready(function() {
 function StatsModel() {
     this.seasons = [
         {
+            id : 'r2018',
+            name :  'REG. SEASON 2017-2018',
+            subban : {
+                stats: [1,0,1,1,-1],
+                team: ['0-1-0', '0 PTS']
+            },
+            weber : {
+                stats: [1,0,1,1,1],
+                team: ['1-0-0', '2 PTS']
+            }
+        },
+        {
             id : 'p2017',
             name :  'PLAYOFFS 2017',
             subban : {
