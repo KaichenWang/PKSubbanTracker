@@ -1,23 +1,6 @@
-var getPollResults = function() {
-    $.ajax({
-        url: '/poll',
-        dataType: 'json',
-        cache: false
-    }).done(function(json){
-        if (!$.isEmptyObject(json)) {
-            var choices = json.demand[0].result.answers.answer;
-            var votesSubban = choices[0].total;
-            var percentSubban = choices[0].percent;
-            percentSubban = Math.round(percentSubban.toFixed(2));
-            var votesWeber = choices[1].total;
-            $('#percent-subban').html(percentSubban);
-            $('#votes-subban').html(votesSubban);
-            $('#percent-weber').html(100 - percentSubban);
-            $('#votes-weber').html(votesWeber);
-        }
-    });
-}
-getPollResults();
+/*
+ * Messages
+ */
 
 var messageIsVisible = false;
 
@@ -40,6 +23,11 @@ var showMessage = function(msgClass, msg) {
     }
 }
 
+
+/*
+ * Poll
+ */
+
 var canVote;
 function checkCookie() {
     var status = '';
@@ -50,6 +38,58 @@ function checkCookie() {
     }
 }
 checkCookie();
+
+function onClickVote (model, e) {
+    if (stats.selectedSeason().isLatest) {
+        if(canVote) {
+            canVote = false;
+
+            var playerA = $(e.srcElement).closest('.container').data('player');
+            var isSubban = playerA === 'subban';
+            var playerB = isSubban ? 'weber' : 'subban';
+            var playerAFullName = isSubban ? 'P.K. Subban' : 'Shea Weber'
+
+            if (isSubban) {
+                $('#PDI_answer43654459').prop("checked", true);
+            } else {
+                $('#PDI_answer43654460').prop("checked", true);
+            }
+
+            PD_prevote9559362(1);
+
+            var currentA = stats.seasons[0][playerA].votes();
+            var currentB = stats.seasons[0][playerB].votes();
+            var votesA = currentA.votes + 1;
+            var percentA = Math.round((votesA / (votesA + currentB.votes) * 100).toFixed(2));
+
+            var newA = {
+                votes: votesA,
+                percent: percentA
+            }
+
+            var newB = {
+                votes: currentB.votes,
+                percent: 100 - percentA
+            }
+
+            stats.seasons[0][playerA].votes(newA);
+            stats.seasons[0][playerB].votes(newB);
+
+            showMessage('success', '+1 vote for ' + playerAFullName);
+        }
+        else {
+            showMessage('error', "Sorry, you've already voted");
+        }
+    }
+    else {
+        showMessage('error', 'Voting has ended for ' + stats.selectedSeason().name);
+    }
+}
+
+
+/*
+ * Comments
+ */
 
 var commentClickable = true;
 $(".trigger-comments").click(function() {
@@ -71,74 +111,53 @@ $(".trigger-comments").click(function() {
     }
 });
 
-$(document).ready(function() {
-    $("#vote-subban").click(function(){
-        if(canVote) {
-            canVote = false;
-            $('#PDI_answer43654459').prop("checked", true);
-            PD_prevote9559362(1);
-            var votesSubban = parseInt($('#votes-subban').text()) + 1;
-            var votesWeber = parseInt($('#votes-weber').text());
-            var percentWeber = Math.round((votesWeber/(votesWeber+votesSubban))*100);
-            var percentSubban = 100 - percentWeber;
-            $('#votes-subban').text(votesSubban);
-            $('#votes-weber').text(votesWeber);
-            $('#percent-subban').text(percentSubban);
-            $('#percent-weber').text(percentWeber);
-            showMessage('success', '+1 vote for PK Subban');
-        }
-        else {
-            showMessage('error', "Sorry, you've already voted");
-        }
-    });
 
-    $("#vote-weber").click(function(){
-        if(canVote) {
-            canVote = false;
-            $('#PDI_answer43654460').prop("checked", true);
-            PD_prevote9559362(1);
-            var votesSubban = parseInt($('#votes-subban').text());
-            var votesWeber = parseInt($('#votes-weber').text()) + 1;
-            var percentWeber = Math.round((votesWeber/(votesWeber+votesSubban))*100);
-            var percentSubban = 100 - percentWeber;
-            $('#votes-subban').text(votesSubban);
-            $('#votes-weber').text(votesWeber);
-            $('#percent-subban').text(percentSubban);
-            $('#percent-weber').text(percentWeber);
-            showMessage('success', '+1 vote for Shea Weber');
-        }
-        else {
-            showMessage('error', "Sorry, you've already voted");
-        }
-    });
-});
-
-// Stats
+/*
+ * Stats
+ */
 
 function StatsModel() {
     this.seasons = [
         {
             id : 'p2017',
             name :  'PLAYOFFS 2017',
+            isLatest: false,
             subban : {
                 stats: [22,2,10,12,5],
-                team: ['2-4', 'CUP FINAL']
+                team: ['2-4', 'CUP FINAL'],
+                votes: {
+                    votes: 12271,
+                    percent: 64
+                }
             },
             weber : {
                 stats: [6,1,2,3,1],
-                team: ['2-4', '1ST RND']
+                team: ['2-4', '1ST RND'],
+                votes: {
+                    votes: 6870,
+                    percent: 36
+                }
             }
         },
         {
             id : 'r2016',
             name :  'REG. SEASON 2016-2017',
+            isLatest: false,
             subban : {
                 stats: [66,10,30,40,-8],
-                team: ['41-29-12', '94 PTS']
+                team: ['41-29-12', '94 PTS'],
+                votes: {
+                    votes: 11433,
+                    percent: 20
+                }
             },
             weber : {
                 stats: [78,17,25,42,20],
-                team: ['47-26-9', '103 PTS']
+                team: ['47-26-9', '103 PTS'],
+                votes: {
+                    votes: 45061,
+                    percent: 80
+                }
             }
         }
     ];
@@ -154,23 +173,33 @@ var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642'
 var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs&site=en_nhlCA';
 var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
 var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20172018'
+var DATA_URL_POLL = '/poll'
+var POLL_OFFSET = {
+    SUBBAN: 23704,
+    WEBER: 51931
+}
 
 $.when(
     fetch (DATA_URL_SUBBAN_REGULAR),
     fetch (DATA_URL_WEBER_REGULAR),
-    fetch (DATA_URL_LEAGUE)
-).done(function(a1, a2, a3){
+    fetch (DATA_URL_LEAGUE),
+    fetch (DATA_URL_POLL)
+).done(function(a1, a2, a3, a4){
+    var poll = mapPollToObject(a4);
 
     var latest = {
         id : 'r2018',
         name :  'REG. SEASON 2017-2018',
+        isLatest: true,
         subban : {
             stats: mapPlayerDataToArray(a1),
-            team: mapLeagueRegDataToArray(a3, 2, 6)
+            team: mapLeagueRegDataToArray(a3, 2, 6),
+            votes: ko.observable(poll.subban.votes)
         },
         weber : {
             stats: mapPlayerDataToArray(a2),
-            team: mapLeagueRegDataToArray(a3, 1, 6)
+            team: mapLeagueRegDataToArray(a3, 1, 6),
+            votes: ko.observable(poll.weber.votes)
         }
     };
 
@@ -209,5 +238,28 @@ function mapPlayerDataToArray (json) {
 function mapLeagueRegDataToArray (json, confIndex, teamIndex) {
     var stats = json[0].records[confIndex].teamRecords[teamIndex];
     var record = stats.leagueRecord;
-    return [record.wins + '-' + record.losses + '-' + record.ot, stats.points];
+    return [record.wins + '-' + record.losses + '-' + record.ot, stats.points + ' PTS'];
+}
+
+function mapPollToObject (json) {
+    var choices = json[0].demand[0].result.answers.answer;
+    var votesSubban = choices[0].total - POLL_OFFSET.SUBBAN;
+    var votesWeber = choices[1].total - POLL_OFFSET.WEBER;
+    var percentSubban = votesSubban / (votesSubban + votesWeber) * 100;
+    percentSubban = Math.round(percentSubban.toFixed(2));
+
+    return {
+        subban: {
+            votes: {
+                votes: votesSubban,
+                percent: percentSubban
+            }
+        },
+        weber: {
+            votes: {
+                votes: votesWeber,
+                percent: 100 - percentSubban
+            }
+        }
+    }
 }
