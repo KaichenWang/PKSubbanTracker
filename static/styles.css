@@ -282,6 +282,27 @@ table td {
     box-shadow: 1px 1px 10px rgb(0, 0, 0);
 }
 
+.button.button--disabled {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: none;
+    cursor: default;
+}
+
+.button.button--disabled:hover,
+.button.button--disabled:focus {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+
+.button.button--disabled:hover .label,
+.button.button--disabled:focus .label {
+    border-color:gray;
+    color: gray;
+}
+
+
 #open-comments {
     position: absolute;
     bottom: 20px;
