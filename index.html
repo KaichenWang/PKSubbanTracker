@@ -50,7 +50,7 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
             <span class="icon-down"></span>
         </div>
     </div>
-    <section class="container" id="container-subban" data-player="subban">
+    <section class="container" id="container-subban">
         <div class="content">
             <h2>P.K. Subban</h2>
             <img class="loading" data-bind="css: {'hidden': selectedSeason().subban.stats.length }" src="loading.gif">
@@ -73,19 +73,17 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
                 <span class="label before">NSH</span>
                 <span class="points" data-bind="text: subban.team[1]"></span>
             </h4>
-            <div class="results" id="results-subban" data-bind="click: onClickVote, with: selectedSeason">
-                <h3 class="button" id="vote-subban" data-bind="css: {'button--disabled': !isLatest}">
-                    <div class="like"><span class="icon-like-left"></span></div>
-                    <span class="vote-count" id="votes-subban" data-bind="text: isLatest ? subban.votes().votes : subban.votes.votes">0</span>
-                    <span class="label before">
-                        <span id="percent-subban" data-bind="text: isLatest ? subban.votes().percent : subban.votes.percent">0</span>
-                        <span>%</span>
-                    </span>
-                </h3>
-            </div>
+            <div class="results" id="results-subban"><h3 class="button" id="vote-subban">
+                <div class="like"><span class="icon-like-left"></span></div>
+                <span class="vote-count" id="votes-subban">0</span>
+                <span class="label before">
+                    <span id="percent-subban">0</span>
+                    <span>%</span>
+                </span>
+            </h3></div>
         </div>
     </section>
-    <section class="container" id="container-weber" data-player="weber">
+    <section class="container" id="container-weber">
         <div class="content">
             <h2>Shea Weber</h2>
             <img data-bind="css: {'hidden': selectedSeason().weber.stats.length }" class="loading" src="loading.gif">
@@ -108,16 +106,14 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
                 <span class="label before">MTL</span>
                 <span class="points" data-bind="text: weber.team[1]"></span>
             </h4>
-            <div class="results" id="results-weber" data-bind="click: onClickVote, with: selectedSeason">
-                <h3 class="button" id="vote-weber" data-bind="css: {'button--disabled': !isLatest}">
-                    <div class="like"><span class="icon-like-left"></span></div>
-                    <span class="vote-count" id="votes-weber" data-bind="text: isLatest ? weber.votes().votes : weber.votes.votes">0</span>
-                    <span class="label before">
-                        <span id="percent-weber" data-bind="text: isLatest ? weber.votes().percent : weber.votes.percent">0</span>
-                        <span>%</span>
-                    </span>
-                </h3>
-            </div>
+            <div class="results" id="results-weber"><h3 class="button" id="vote-weber">
+                <div class="like"><span class="icon-like-left"></span></div>
+                <span class="vote-count" id="votes-weber">0</span>
+                <span class="label before">
+                    <span id="percent-weber">0</span>
+                    <span>%</span>
+                </span>
+            </h3></div>
         </div>
     </section>
 </section>
