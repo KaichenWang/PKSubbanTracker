@@ -118,18 +118,6 @@ $(document).ready(function() {
 function StatsModel() {
     this.seasons = [
         {
-            id : 'r2018',
-            name :  'REG. SEASON 2017-2018',
-            subban : {
-                stats: [1,0,1,1,-1],
-                team: ['0-1-0', '0 PTS']
-            },
-            weber : {
-                stats: [1,0,1,1,1],
-                team: ['1-0-0', '2 PTS']
-            }
-        },
-        {
             id : 'p2017',
             name :  'PLAYOFFS 2017',
             subban : {
@@ -157,24 +145,38 @@ function StatsModel() {
     this.selectedSeason = ko.observable();
 }
 
-var dataLoaded = 0;
 var stats = new StatsModel();
 
-ko.applyBindings(stats);
+// ko.applyBindings(stats);
 
-// var DATA_URL_SUBBAN_REGULAR = 'https://statsapi.web.nhl.com/api/v1/people/8474056?expand=person.stats&stats=yearByYear&site=en_nhlCA';
-// var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642');
-// var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs&site=en_nhlCA';
-// var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
-//
-// $.when(
-//     fetch (DATA_URL_SUBBAN_REGULAR),
-//     fetch (DATA_URL_WEBER_REGULAR)
-// ).done(function(a1, a2){
-//     stats.seasons[0].subban.stats = mapPlayerDataToArray(a1);
-//     stats.seasons[0].weber.stats = mapPlayerDataToArray(a2);
-//     ko.applyBindings(stats);
-// });
+var DATA_URL_SUBBAN_REGULAR = 'https://statsapi.web.nhl.com/api/v1/people/8474056?expand=person.stats&stats=yearByYear&site=en_nhlCA';
+var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642');
+var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs&site=en_nhlCA';
+var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
+var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20172018'
+
+$.when(
+    fetch (DATA_URL_SUBBAN_REGULAR),
+    fetch (DATA_URL_WEBER_REGULAR),
+    fetch (DATA_URL_LEAGUE)
+).done(function(a1, a2, a3){
+
+    var latest = {
+        id : 'r2018',
+        name :  'REG. SEASON 2017-2018',
+        subban : {
+            stats: mapPlayerDataToArray(a1),
+            team: mapLeagueRegDataToArray(a3, 2, 6)
+        },
+        weber : {
+            stats: mapPlayerDataToArray(a2),
+            team: mapLeagueRegDataToArray(a3, 1, 6)
+        }
+    };
+
+    stats.seasons.unshift(latest);
+    ko.applyBindings(stats);
+});
 
 // Helpers
 
@@ -202,4 +204,10 @@ function mapPlayerDataToArray (json) {
         cur.points,
         cur.plusMinus
     ]
+}
+
+function mapLeagueRegDataToArray (json, confIndex, teamIndex) {
+    var stats = json[0].records[confIndex].teamRecords[teamIndex];
+    var record = stats.leagueRecord;
+    return [record.wins + '-' + record.losses + '-' + record.ot, stats.points];
 }
