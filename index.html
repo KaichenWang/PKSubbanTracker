@@ -53,32 +53,40 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
     <section class="container" id="container-subban" data-player="subban">
         <div class="content">
             <h2>P.K. Subban</h2>
-            <img class="loading" data-bind="css: {'hidden': selectedSeason().subban.stats.length }" src="loading.gif">
-            <table class="stats hidden" id="stats-subban" data-bind="with: selectedSeason, css: {'hidden': !selectedSeason().subban.stats.length }">
+            <img class="loading" data-bind="css: {'hidden': isDataLoaded }" src="loading.gif">
+            <table class="stats hidden" id="stats-subban" data-bind="with: selectedSeason, css: {'hidden': !isDataLoaded }">
                 <thead>
-                    <td>GP</td>
-                    <td>G</td>
-                    <td>A</td>
-                    <td>P</td>
-                    <td>+/-</td>
+                    <tr>
+                        <td>GP</td>
+                        <td>G</td>
+                        <td>A</td>
+                        <td>P</td>
+                        <td>+/-</td>
+                    </tr>
                 </thead>
                 <tbody>
-                    <tr data-bind="foreach: subban.stats">
-                        <td data-bind="text: $data"></td>
+                    <tr data-bind="with: subban.stats">
+                        <td data-bind="text: played"></td>
+                        <td data-bind="text: goals"></td>
+                        <td data-bind="text: assists"></td>
+                        <td data-bind="text: points"></td>
+                        <td data-bind="text: plusMinus"></td>
                     </tr>
                 </tbody>
             </table>
-            <h4 class="team" id="stats-nsh" data-bind="with: selectedSeason">
-                <span class="record" data-bind="text: subban.team[0]"></span>
-                <span class="label before">NSH</span>
-                <span class="points" data-bind="text: subban.team[1]"></span>
-            </h4>
+            <!-- ko if: selectedSeason().id !== 'total' -->
+                <h4 class="team" id="stats-nsh" data-bind="with: selectedSeason">
+                    <span class="record" data-bind="text: isPlayoff ? subban.team.wins+'-'+subban.team.losses : subban.team.wins+'-'+subban.team.losses+'-'+subban.team.otLosses"></span>
+                    <span class="label before">NSH</span>
+                    <span class="points" data-bind="text: isPlayoff ? subban.team.status : subban.team.points+' PTS'"></span>
+                </h4>
+            <!-- /ko -->
             <div class="results" id="results-subban" data-bind="click: onClickVote, with: selectedSeason">
-                <h3 class="button" id="vote-subban" data-bind="css: {'button--disabled': !isLatest}">
+                <h3 class="button" id="vote-subban" data-bind="css: {'button--disabled': !isLatest && id !== 'total'}">
                     <div class="like"><span class="icon-like-left"></span></div>
-                    <span class="vote-count" id="votes-subban" data-bind="text: isLatest ? subban.votes().votes : subban.votes.votes">0</span>
+                    <span class="vote-count" id="votes-subban" data-bind="text: isLatest || id === 'total'? subban.votes().votes : subban.votes.votes">0</span>
                     <span class="label before">
-                        <span id="percent-subban" data-bind="text: isLatest ? subban.votes().percent : subban.votes.percent">0</span>
+                        <span id="percent-subban" data-bind="text: isLatest || id === 'total'? subban.votes().percent : subban.votes.percent">0</span>
                         <span>%</span>
                     </span>
                 </h3>
@@ -88,32 +96,40 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
     <section class="container" id="container-weber" data-player="weber">
         <div class="content">
             <h2>Shea Weber</h2>
-            <img data-bind="css: {'hidden': selectedSeason().weber.stats.length }" class="loading" src="loading.gif">
-            <table class="stats hidden" id="stats-weber" data-bind="with: selectedSeason, css: {'hidden': !selectedSeason().weber.stats.length }">
+            <img data-bind="css: {'hidden': isDataLoaded }" class="loading" src="loading.gif">
+            <table class="stats hidden" id="stats-weber" data-bind="with: selectedSeason, css: {'hidden': !isDataLoaded }">
                 <thead>
-                    <td>GP</td>
-                    <td>G</td>
-                    <td>A</td>
-                    <td>P</td>
-                    <td>+/-</td>
+                    <tr>
+                        <td>GP</td>
+                        <td>G</td>
+                        <td>A</td>
+                        <td>P</td>
+                        <td>+/-</td>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr data-bind="foreach: weber.stats">
-                    <td data-bind="text: $data"></td>
-                </tr>
+                    <tr data-bind="with: weber.stats">
+                        <td data-bind="text: played"></td>
+                        <td data-bind="text: goals"></td>
+                        <td data-bind="text: assists"></td>
+                        <td data-bind="text: points"></td>
+                        <td data-bind="text: plusMinus"></td>
+                    </tr>
                 </tbody>
             </table>
-            <h4 class="team" id="stats-mtl" data-bind="with: selectedSeason">
-                <span class="record" data-bind="text: weber.team[0]"></span>
-                <span class="label before">MTL</span>
-                <span class="points" data-bind="text: weber.team[1]"></span>
-            </h4>
+            <!-- ko if: selectedSeason().id !== 'total' -->
+                <h4 class="team" id="stats-mtl" data-bind="with: selectedSeason">
+                    <span class="record" data-bind="text: isPlayoff ? weber.team.wins+'-'+weber.team.losses : weber.team.wins+'-'+weber.team.losses+'-'+weber.team.otLosses"></span>
+                    <span class="label before">NSH</span>
+                    <span class="points" data-bind="text: isPlayoff ? weber.team.status : weber.team.points+' PTS'"></span>
+                </h4>
+            <!-- /ko -->
             <div class="results" id="results-weber" data-bind="click: onClickVote, with: selectedSeason">
-                <h3 class="button" id="vote-weber" data-bind="css: {'button--disabled': !isLatest}">
+                <h3 class="button" id="vote-weber" data-bind="css: {'button--disabled': !isLatest && id !== 'total'}">
                     <div class="like"><span class="icon-like-left"></span></div>
-                    <span class="vote-count" id="votes-weber" data-bind="text: isLatest ? weber.votes().votes : weber.votes.votes">0</span>
+                    <span class="vote-count" id="votes-weber" data-bind="text: isLatest || id === 'total' ? weber.votes().votes : weber.votes.votes">0</span>
                     <span class="label before">
-                        <span id="percent-weber" data-bind="text: isLatest ? weber.votes().percent : weber.votes.percent">0</span>
+                        <span id="percent-weber" data-bind="text: isLatest || id === 'total' ? weber.votes().percent : weber.votes.percent">0</span>
                         <span>%</span>
                     </span>
                 </h3>
@@ -123,7 +139,7 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
 </section>
 <h3 id="open-comments" class="button trigger-comments icon-bubble"></h3>
 <section class="hidden" id="poll">
-    <script type="text/javascript" charset="utf-8" src="9559362.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://static.polldaddy.com/p/9559362.js"></script>
     <noscript><a href="https://polldaddy.com/poll/9559362/">Who won the trade?</a></noscript>
 </section>
 <section class="wrapper hidden slide-out" id="page-1">

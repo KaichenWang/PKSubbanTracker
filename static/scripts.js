@@ -40,7 +40,7 @@ function checkCookie() {
 checkCookie();
 
 function onClickVote (model, e) {
-    if (stats.selectedSeason().isLatest) {
+    if (stats.selectedSeason().isLatest || stats.selectedSeason().id === 'total') {
         if(canVote) {
             canVote = false;
 
@@ -57,23 +57,30 @@ function onClickVote (model, e) {
 
             PD_prevote9559362(1);
 
+            // Latest season
             var currentA = stats.seasons[0][playerA].votes();
             var currentB = stats.seasons[0][playerB].votes();
-            var votesA = currentA.votes + 1;
-            var percentA = Math.round((votesA / (votesA + currentB.votes) * 100).toFixed(2));
+            var newCurrent =
+                isSubban ?
+                    mapPollToObject(currentA.votes + 1, currentB.votes, 0, 0)
+                :
+                    mapPollToObject(currentB.votes, currentA.votes + 1, 0, 0);
 
-            var newA = {
-                votes: votesA,
-                percent: percentA
-            }
+            stats.seasons[0][playerA].votes(newCurrent[playerA].votes);
+            stats.seasons[0][playerB].votes(newCurrent[playerB].votes);
 
-            var newB = {
-                votes: currentB.votes,
-                percent: 100 - percentA
-            }
+            // Totals
+            var index = stats.seasons.length - 1;
+            var totalsA = stats.seasons[index][playerA].votes();
+            var totalsB = stats.seasons[index][playerB].votes();
+            var newTotals =
+                isSubban ?
+                    mapPollToObject(totalsA.votes + 1, totalsB.votes, 0, 0)
+                :
+                    mapPollToObject(totalsB.votes, totalsA.votes + 1, 0, 0);
 
-            stats.seasons[0][playerA].votes(newA);
-            stats.seasons[0][playerB].votes(newB);
+            stats.seasons[index][playerA].votes(newTotals[playerA].votes);
+            stats.seasons[index][playerB].votes(newTotals[playerB].votes);
 
             showMessage('success', '+1 vote for ' + playerAFullName);
         }
@@ -122,17 +129,42 @@ function StatsModel() {
             id : 'p2017',
             name :  'PLAYOFFS 2017',
             isLatest: false,
+            isPlayoff: true,
             subban : {
-                stats: [22,2,10,12,5],
-                team: ['2-4', 'CUP FINAL'],
+                stats: {
+                    played: 22,
+                    goals: 2,
+                    assists: 10,
+                    points: 12,
+                    plusMinus: 5
+                },
+                team: {
+                    wins: 14,
+                    losses: 8,
+                    otLosses: '',
+                    points: '',
+                    status: 'CUP FINAL'
+                },
                 votes: {
                     votes: 12271,
                     percent: 64
                 }
             },
             weber : {
-                stats: [6,1,2,3,1],
-                team: ['2-4', '1ST RND'],
+                stats: {
+                    played: 6,
+                    goals: 1,
+                    assists: 2,
+                    points: 3,
+                    plusMinus: 1
+                },
+                team: {
+                    wins: 2,
+                    losses: 4,
+                    otLosses: '',
+                    points: '',
+                    status: '1ST RND'
+                },
                 votes: {
                     votes: 6870,
                     percent: 36
@@ -143,17 +175,42 @@ function StatsModel() {
             id : 'r2016',
             name :  'REG. SEASON 2016-2017',
             isLatest: false,
+            isPlayoff: false,
             subban : {
-                stats: [66,10,30,40,-8],
-                team: ['41-29-12', '94 PTS'],
+                stats: {
+                    played: 66,
+                    goals: 10,
+                    assists: 30,
+                    points: 40,
+                    plusMinus: -8
+                },
+                team: {
+                    wins: 41,
+                    losses: 29,
+                    otLosses: 12,
+                    points: 94,
+                    status: ''
+                },
                 votes: {
                     votes: 11433,
                     percent: 20
                 }
             },
             weber : {
-                stats: [78,17,25,42,20],
-                team: ['47-26-9', '103 PTS'],
+                stats: {
+                    played: 78,
+                    goals: 17,
+                    assists: 25,
+                    points: 42,
+                    plusMinus: 20
+                },
+                team: {
+                    wins: 47,
+                    losses: 26,
+                    otLosses: 9,
+                    points: 103,
+                    status: ''
+                },
                 votes: {
                     votes: 45061,
                     percent: 80
@@ -161,6 +218,7 @@ function StatsModel() {
             }
         }
     ];
+    this.isDataLoaded = ko.observable(false);
     this.selectedSeason = ko.observable();
 }
 
@@ -172,12 +230,28 @@ var DATA_URL_SUBBAN_REGULAR = 'https://statsapi.web.nhl.com/api/v1/people/847405
 var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642');
 var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs&site=en_nhlCA';
 var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
-var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20172018'
-var DATA_URL_POLL = '/poll'
+var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20172018';
+var DATA_URL_POLL = '/poll';
+var STATS_OFFSET = {
+    SUBBAN: {
+        played: 88,
+        goals: 12,
+        assists: 40,
+        points: 52,
+        plusMinus: -3
+    },
+    WEBER: {
+        played: 84,
+        goals: 18,
+        assists: 27,
+        points: 45,
+        plusMinus: 21
+    }
+};
 var POLL_OFFSET = {
     SUBBAN: 23704,
     WEBER: 51931
-}
+};
 
 $.when(
     fetch (DATA_URL_SUBBAN_REGULAR),
@@ -185,26 +259,62 @@ $.when(
     fetch (DATA_URL_LEAGUE),
     fetch (DATA_URL_POLL)
 ).done(function(a1, a2, a3, a4){
-    var poll = mapPollToObject(a4);
+    var pollChoices = a4[0].demand[0].result.answers.answer;
+    var votesSubban = pollChoices[0].total;
+    var votesWeber = pollChoices[1].total;
+    var pollLatest = mapPollToObject(votesSubban, votesWeber, POLL_OFFSET.SUBBAN, POLL_OFFSET.WEBER);
+    var pollTotal = mapPollToObject(votesSubban, votesWeber, 0, 0);
 
     var latest = {
         id : 'r2018',
         name :  'REG. SEASON 2017-2018',
         isLatest: true,
+        isPlayoff: false,
         subban : {
             stats: mapPlayerDataToArray(a1),
             team: mapLeagueRegDataToArray(a3, 2, 6),
-            votes: ko.observable(poll.subban.votes)
+            votes: ko.observable(pollLatest.subban.votes)
         },
         weber : {
             stats: mapPlayerDataToArray(a2),
             team: mapLeagueRegDataToArray(a3, 1, 6),
-            votes: ko.observable(poll.weber.votes)
+            votes: ko.observable(pollLatest.weber.votes)
+        }
+    };
+
+    var total = {
+        id : 'total',
+        name :  'TOTALS SINCE TRADE',
+        isLatest: false,
+        isPlayoff: false,
+        subban : {
+            stats: {
+                played: latest.subban.stats.played + STATS_OFFSET.SUBBAN.played,
+                goals: latest.subban.stats.goals + STATS_OFFSET.SUBBAN.goals,
+                assists: latest.subban.stats.assists + STATS_OFFSET.SUBBAN.assists,
+                points: latest.subban.stats.points + STATS_OFFSET.SUBBAN.points,
+                plusMinus: latest.subban.stats.plusMinus + STATS_OFFSET.SUBBAN.plusMinus
+            },
+            team: {},
+            votes: ko.observable(pollTotal.subban.votes)
+        },
+        weber : {
+            stats: {
+                played: latest.weber.stats.played + STATS_OFFSET.WEBER.played,
+                goals: latest.weber.stats.goals + STATS_OFFSET.WEBER.goals,
+                assists: latest.weber.stats.assists + STATS_OFFSET.WEBER.assists,
+                points: latest.weber.stats.points + STATS_OFFSET.WEBER.points,
+                plusMinus: latest.weber.stats.plusMinus + STATS_OFFSET.WEBER.plusMinus
+            },
+            team: {},
+            votes: ko.observable(pollTotal.weber.votes)
         }
     };
 
     stats.seasons.unshift(latest);
+    stats.seasons.push(total);
     ko.applyBindings(stats);
+    stats.isDataLoaded(true);
 });
 
 // Helpers
@@ -226,25 +336,30 @@ function mapPlayerDataToArray (json) {
         i--;
     }
     cur = cur.stat;
-    return [
-        cur.games,
-        cur.goals,
-        cur.assists,
-        cur.points,
-        cur.plusMinus
-    ]
+    return {
+        played: cur.games,
+        goals: cur.goals,
+        assists: cur.assists,
+        points: cur.points,
+        plusMinus: cur.plusMinus
+    };
 }
 
 function mapLeagueRegDataToArray (json, confIndex, teamIndex) {
     var stats = json[0].records[confIndex].teamRecords[teamIndex];
     var record = stats.leagueRecord;
-    return [record.wins + '-' + record.losses + '-' + record.ot, stats.points + ' PTS'];
+    return {
+        wins: record.wins,
+        losses: record.losses,
+        otLosses: record.ot,
+        points: stats.points,
+        status: ''
+    };
 }
 
-function mapPollToObject (json) {
-    var choices = json[0].demand[0].result.answers.answer;
-    var votesSubban = choices[0].total - POLL_OFFSET.SUBBAN;
-    var votesWeber = choices[1].total - POLL_OFFSET.WEBER;
+function mapPollToObject (votesA, votesB, offsetA, offsetB) {
+    var votesSubban = votesA - offsetA;
+    var votesWeber = votesB - offsetB;
     var percentSubban = votesSubban / (votesSubban + votesWeber) * 100;
     percentSubban = Math.round(percentSubban.toFixed(2));
 
