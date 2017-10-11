@@ -272,12 +272,12 @@ $.when(
         isPlayoff: false,
         subban : {
             stats: mapPlayerDataToArray(a1),
-            team: mapLeagueRegDataToArray(a3, 2, 6),
+            team: mapLeagueRegDataToArray(a3, 2, 18),
             votes: ko.observable(pollLatest.subban.votes)
         },
         weber : {
             stats: mapPlayerDataToArray(a2),
-            team: mapLeagueRegDataToArray(a3, 1, 6),
+            team: mapLeagueRegDataToArray(a3, 1, 8),
             votes: ko.observable(pollLatest.weber.votes)
         }
     };
@@ -345,14 +345,19 @@ function mapPlayerDataToArray (json) {
     };
 }
 
-function mapLeagueRegDataToArray (json, confIndex, teamIndex) {
-    var stats = json[0].records[confIndex].teamRecords[teamIndex];
-    var record = stats.leagueRecord;
+function mapLeagueRegDataToArray (json, confIndex, teamId) {
+
+
+    var stats = json[0].records[confIndex].teamRecords;
+    var teamStats = stats.filter(function(team) {
+        return team.team.id === teamId;
+    })[0];
+    var record = teamStats.leagueRecord;
     return {
         wins: record.wins,
         losses: record.losses,
         otLosses: record.ot,
-        points: stats.points,
+        points: teamStats.points,
         status: ''
     };
 }
