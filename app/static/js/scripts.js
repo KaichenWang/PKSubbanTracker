@@ -63,7 +63,7 @@ function onClickVote (model, e) {
             var newCurrent =
                 isSubban ?
                     mapPollToObject(currentA.votes + 1, currentB.votes, 0, 0)
-                :
+                    :
                     mapPollToObject(currentB.votes, currentA.votes + 1, 0, 0);
 
             stats.seasons[0][playerA].votes(newCurrent[playerA].votes);
@@ -76,7 +76,7 @@ function onClickVote (model, e) {
             var newTotals =
                 isSubban ?
                     mapPollToObject(totalsA.votes + 1, totalsB.votes, 0, 0)
-                :
+                    :
                     mapPollToObject(totalsB.votes, totalsA.votes + 1, 0, 0);
 
             stats.seasons[index][playerA].votes(newTotals[playerA].votes);
