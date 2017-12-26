@@ -4,7 +4,7 @@ module.exports = function(grunt) {
         uglify: {
             build: {
                 src: 'app/static/js/scripts.js',
-                dest: 'static/scripts.min.js'
+                dest: 'static/js/scripts.min.js'
             }
         },
 		less: {
@@ -17,7 +17,7 @@ module.exports = function(grunt) {
         cssmin: {
             compress: {
                 files: {
-                    'static/styles.min.css': ['app/static/css/styles.css']
+                    'static/css/styles.min.css': ['app/static/css/styles.css']
                 }
             }
         },
