@@ -689,3 +689,14 @@ table td {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+@media only screen and (max-width : 768px) {
+    .loader {
+        &::before {
+            border: 6px solid #f3f3f3; /* Light grey */
+            border-top: 6px solid #00b8ff; /* Blue */
+            width: 25px;
+            height: 25px;
+        }
+    }
+}
