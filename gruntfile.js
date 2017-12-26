@@ -22,10 +22,20 @@ module.exports = function(grunt) {
             }
         },
 		watch: {
-			less: {
-				files:'app/static/less/*.less',
-				tasks:'less'
-			}
+            scripts: {
+                files: ['gruntfile.js','app/static/js/*.js'],
+                tasks: ['uglify'],
+                options: {
+                    debounceDelay: 250
+                }
+            },
+            less: {
+                files: ['app/static/less/*.less', 'app/static/css/*.css'],
+                tasks: ['less','cssmin'],
+                options: {
+                    debounceDelay: 250
+                }
+            }
 		}
 	});
 

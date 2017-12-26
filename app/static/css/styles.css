@@ -532,7 +532,7 @@ table td {
   }
   .container {
     width: 100%;
-    height: calc(30%);
+    height: calc(50% - 40px / 2);
     min-height: 275px;
   }
   #vote-weber {
