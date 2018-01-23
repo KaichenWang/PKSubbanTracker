@@ -13,11 +13,9 @@
     "url": "https://github.com/KaichenWang/PKSubbanTracker"
   },
   "dependencies": {
+    "compression": "^1.7.1",
     "express": "latest",
-    "request": "latest",
-    "cheerio": "latest",
-    "redis": "0.6.7",
-    "xml2js ": "latest"
+    "request": "latest"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

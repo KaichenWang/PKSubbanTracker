@@ -3,6 +3,7 @@ var fs = require('fs');
 var request = require('request');
 var app = express();
 var path = require('path');
+var compression = require('compression');
 
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
@@ -12,6 +13,8 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+app.use(compression());
 
 app.get('/poll', function (req, res) {
     var url = 'https://api.polldaddy.com/';
@@ -45,6 +48,23 @@ app.get('/poll', function (req, res) {
             if(data.pdResponse.hasOwnProperty('demands')){
                 json = data.pdResponse.demands;
             }
+        }
+        res.send(json);
+    })
+})
+
+app.get('/search', function (req, res) {
+    var value = req.query.value
+    var url = 'https://suggest.svc.nhl.com/svc/suggest/v1/minactiveplayers/' + value + '/99999';
+    var json = {};
+    request(url, function (err, response, data) {
+        if (err || response.statusCode != 200) {
+            console.log('REQUEST ERROR: ' + err);
+        }
+        else {
+            json = data;
+            var test = json
+
         }
         res.send(json);
     })
