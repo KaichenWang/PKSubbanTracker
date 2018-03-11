@@ -231,7 +231,7 @@ var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642'
 var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs&site=en_nhlCA';
 var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
 var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20172018';
-var DATA_URL_POLL = 'https://api.nhltracker.com/poll';
+var DATA_URL_POLL = 'https://pk-subban-tracker-voagwhuhoi.now.sh/poll';
 var STATS_OFFSET = {
     SUBBAN: {
         played: 88,
