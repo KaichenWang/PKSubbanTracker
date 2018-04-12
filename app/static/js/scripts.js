@@ -334,7 +334,7 @@ $.when(
                 losses: 0,
                 otLosses: 0,
                 points: 0,
-                status: '1st Round'
+                status: '1st Rnd'
             },
             votes: ko.observable(pollLatest.subban.votes)
         },
