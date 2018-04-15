@@ -185,8 +185,8 @@ function StatsModel() {
                     plusMinus: 5
                 },
                 team: {
-                    wins: 14,
-                    losses: 8,
+                    wins: 2,
+                    losses: 4,
                     otLosses: '',
                     points: '',
                     status: 'CUP FINAL'
@@ -209,7 +209,7 @@ function StatsModel() {
                     losses: 4,
                     otLosses: '',
                     points: '',
-                    status: '1ST RND'
+                    status: 'Round 1'
                 },
                 votes: {
                     votes: 6870,
@@ -277,7 +277,7 @@ var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642'
 var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs';
 var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
 var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20172018';
-var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/teams/18?expand=team.schedule.next';
+var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2018-04-01&endDate=2018-07-01&gameType=P&expand=schedule.game.seriesSummary,seriesSummary.series&teamId=18';
 var DATA_URL_PLAYOFF_MONT = DATA_URL_PLAYOFF_NASH.replace('18','8');
 var DATA_URL_POLL = 'https://nhl-tracker-api.now.sh/poll';
 var STATS_OFFSET = {
@@ -303,11 +303,10 @@ var POLL_OFFSET = {
 
 $.when(
     fetch (DATA_URL_SUBBAN_PLAYOFF),
-    fetch (DATA_URL_WEBER_REGULAR),
     fetch (DATA_URL_PLAYOFF_NASH),
     fetch (DATA_URL_POLL)
-).done(function(a1, a2, a3, a4){
-    var pollChoices = a4[0].demand[0].result.answers.answer;
+).done(function(a1, a2, a3){
+    var pollChoices = a3[0].demand[0].result.answers.answer;
     var votesSubban = pollChoices[0].total;
     var votesWeber = pollChoices[1].total;
     var pollLatest = mapPollToObject(votesSubban, votesWeber, POLL_OFFSET.SUBBAN, POLL_OFFSET.WEBER);
@@ -318,26 +317,9 @@ $.when(
         name :  'PLAYOFFS 2018',
         isLatest: true,
         isPlayoff: true,
-        // subban : {
-        //     stats: mapPlayerDataToArray(a1),
-        //     team: mapLeagueRegDataToArray(a3, 2, 18),
-        //     votes: ko.observable(pollLatest.subban.votes)
-        // },
         subban : {
-            stats: {
-                played: 1,
-                goals: 0,
-                assists: 0,
-                points: 0,
-                plusMinus: -2
-            },
-            team: {
-                wins: 1,
-                losses: 0,
-                otLosses: 0,
-                points: 0,
-                status: '1st Rnd'
-            },
+            stats: mapPlayerDataToArray(a1),
+            team: mapLeaguePlayoffDataToObject(a2, 18),
             votes: ko.observable(pollLatest.subban.votes)
         },
         weber : {
@@ -423,8 +405,6 @@ function mapPlayerDataToArray (json) {
 }
 
 function mapLeagueRegDataToArray (json, confIndex, teamId) {
-
-
     var stats = json[0].records[confIndex].teamRecords;
     var teamStats = stats.filter(function(team) {
         return team.team.id === teamId;
@@ -458,5 +438,37 @@ function mapPollToObject (votesA, votesB, offsetA, offsetB) {
                 percent: 100 - percentSubban
             }
         }
+    }
+}
+
+function mapLeaguePlayoffDataToObject (json, teamId) {
+    var dates = json[0].dates;
+    if (dates.length > 0) {
+        var latest = dates[dates.length - 1].games[0].seriesSummary.series;
+        var record = {
+            wins: 0,
+            losses: 0
+        };
+        latest.matchupTeams.forEach(function(team){
+            if (team.team.id === teamId) {
+                record = team.seriesRecord;
+            }
+        });
+        return {
+            wins: record.wins,
+            losses: record.losses,
+            otLosses: 0,
+            points: 0,
+            status: 'Round ' + latest.round.number
+        };
+    }
+    else {
+        return {
+            wins: 0,
+            losses: 0,
+            otLosses: 0,
+            points: 0,
+            status: ''
+        };
     }
 }
