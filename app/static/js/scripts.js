@@ -126,6 +126,52 @@ $(".trigger-comments").click(function() {
 function StatsModel() {
     this.seasons = [
         {
+            id : 'p2018',
+            name :  'PLAYOFFS 2018',
+            isLatest: false,
+            isPlayoff: true,
+            subban : {
+                stats: {
+                    played: 13,
+                    goals: 4,
+                    assists: 5,
+                    points: 9,
+                    plusMinus: -2
+                },
+                team: {
+                    wins: 3,
+                    losses: 4,
+                    otLosses: '',
+                    points: '',
+                    status: 'Round 2'
+                },
+                votes: {
+                    votes: 179459,
+                    percent: 72
+                }
+            },
+            weber : {
+                stats: {
+                    played: 0,
+                    goals: 0,
+                    assists: 0,
+                    points: 0,
+                    plusMinus: 0
+                },
+                team: {
+                    wins: 0,
+                    losses: 0,
+                    otLosses: '',
+                    points: '',
+                    status: 'No Playoffs'
+                },
+                votes: {
+                    votes: 70481,
+                    percent: 28
+                }
+            }
+        },
+        {
             id : 'r2018',
             name :  'REG. SEASON 2017-2018',
             isLatest: false,
@@ -276,17 +322,15 @@ var DATA_URL_SUBBAN_REGULAR = 'https://statsapi.web.nhl.com/api/v1/people/847405
 var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642');
 var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs';
 var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
-var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20172018';
-var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2018-04-01&endDate=2018-07-01&gameType=P&expand=schedule.game.seriesSummary,seriesSummary.series&teamId=18';
-var DATA_URL_PLAYOFF_MONT = DATA_URL_PLAYOFF_NASH.replace('18','8');
+var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20182019';
 var DATA_URL_POLL = 'https://nhl-tracker-api.now.sh/poll';
 var STATS_OFFSET = {
     SUBBAN: {
-        played: 170,
-        goals: 28,
-        assists: 83,
-        points: 111,
-        plusMinus: 15
+        played: 183,
+        goals: 32,
+        assists: 88,
+        points: 120,
+        plusMinus: 13
     },
     WEBER: {
         played: 110,
@@ -297,29 +341,30 @@ var STATS_OFFSET = {
     }
 };
 var POLL_OFFSET = {
-    SUBBAN: 129938,
-    WEBER: 112932
+    SUBBAN: 309397,
+    WEBER: 183413
 };
 
 $.when(
-    fetch (DATA_URL_SUBBAN_PLAYOFF),
-    fetch (DATA_URL_PLAYOFF_NASH),
+    fetch (DATA_URL_SUBBAN_REGULAR),
+    fetch (DATA_URL_WEBER_REGULAR),
+    fetch (DATA_URL_LEAGUE),
     fetch (DATA_URL_POLL)
-).done(function(a1, a2, a3){
-    var pollChoices = a3[0].demand[0].result.answers.answer;
+).done(function(a1, a2, a3, a4){
+    var pollChoices = a4[0].demand[0].result.answers.answer;
     var votesSubban = pollChoices[0].total;
     var votesWeber = pollChoices[1].total;
     var pollLatest = mapPollToObject(votesSubban, votesWeber, POLL_OFFSET.SUBBAN, POLL_OFFSET.WEBER);
     var pollTotal = mapPollToObject(votesSubban, votesWeber, 0, 0);
 
     var latest = {
-        id : 'p2018',
-        name :  'PLAYOFFS 2018',
+        id : 'r2019',
+        name :  'REG. SEASON 2018-2019',
         isLatest: true,
-        isPlayoff: true,
+        isPlayoff: false,
         subban : {
             stats: mapPlayerDataToArray(a1),
-            team: mapLeaguePlayoffDataToObject(a2, 18),
+            team: mapLeagueRegDataToArray(a3, 2, 18),
             votes: ko.observable(pollLatest.subban.votes)
         },
         weber : {
@@ -330,13 +375,7 @@ $.when(
                 points: 0,
                 plusMinus: 0
             },
-            team: {
-                wins: 0,
-                losses: 0,
-                otLosses: 0,
-                points: 0,
-                status: 'No Playoffs'
-            },
+            team: mapLeagueRegDataToArray(a3, 1, 8),
             votes: ko.observable(pollLatest.weber.votes)
         }
     };
@@ -405,6 +444,8 @@ function mapPlayerDataToArray (json) {
 }
 
 function mapLeagueRegDataToArray (json, confIndex, teamId) {
+
+
     var stats = json[0].records[confIndex].teamRecords;
     var teamStats = stats.filter(function(team) {
         return team.team.id === teamId;
