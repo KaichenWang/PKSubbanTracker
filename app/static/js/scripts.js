@@ -368,13 +368,7 @@ $.when(
             votes: ko.observable(pollLatest.subban.votes)
         },
         weber : {
-            stats: {
-                played: 0,
-                goals: 0,
-                assists: 0,
-                points: 0,
-                plusMinus: 0
-            },
+            stats: mapPlayerDataToArray(a2),
             team: mapLeagueRegDataToArray(a3, 1, 8),
             votes: ko.observable(pollLatest.weber.votes)
         }
