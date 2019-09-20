@@ -2,12 +2,18 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg:grunt.file.readJSON('package.json'),
         uglify: {
+            options : {
+                sourceMap : true
+            },
             build: {
                 src: 'app/static/js/scripts.js',
-                dest: 'static/js/scripts.min.js'
+                dest: 'dist/static/js/scripts.min.js'
             }
         },
 		less: {
+            options: {
+                sourceMap: true
+            },
 			compile: {
 				files: {
 					'app/static/css/styles.css' : 'app/static/less/styles.less'
@@ -17,7 +23,7 @@ module.exports = function(grunt) {
         cssmin: {
             compress: {
                 files: {
-                    'static/css/styles.min.css': ['app/static/css/styles.css']
+                    'dist/static/css/styles.min.css': ['app/static/css/styles.css']
                 }
             }
         },
@@ -42,6 +48,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.registerTask('default', ['less']);
+	grunt.registerTask('default', ['less', 'cssmin', 'uglify']);
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 }
