@@ -124,7 +124,53 @@ $(".trigger-comments").click(function() {
  */
 
 function StatsModel() {
-    this.seasons = [
+    this.seasons = [        
+        {
+            id : 'p2019',
+            name :  'PLAYOFFS 2019',
+            isLatest: false,
+            isPlayoff: true,
+            subban : {
+                stats: {
+                    played: 6,
+                    goals: 1,
+                    assists: 2,
+                    points: 3,
+                    plusMinus: -3
+                },
+                team: {
+                    wins: 2,
+                    losses: 4,
+                    otLosses: '',
+                    points: '',
+                    status: 'Round 1'
+                },
+                votes: {
+                    votes: 5622,
+                    percent: 48
+                }
+            },
+            weber : {
+                stats: {
+                    played: 0,
+                    goals: 0,
+                    assists: 0,
+                    points: 0,
+                    plusMinus: 0
+                },
+                team: {
+                    wins: 0,
+                    losses: 0,
+                    otLosses: '',
+                    points: '',
+                    status: 'No Playoffs'
+                },
+                votes: {
+                    votes: 6153,
+                    percent: 52
+                }
+            }
+        },
         {
             id : 'r2019',
             name :  'REG. SEASON 2018-2019',
@@ -374,11 +420,11 @@ var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/schedule?startD
 var DATA_URL_PLAYOFF_MONT = DATA_URL_PLAYOFF_NASH.replace('18','8');
 var STATS_OFFSET = {
     SUBBAN: {
-        played: 246,
-        goals: 41,
-        assists: 110,
-        points: 151,
-        plusMinus: 18
+        played: 252,
+        goals: 42,
+        assists: 112,
+        points: 154,
+        plusMinus: 15
     },
     WEBER: {
         played: 168,
@@ -389,29 +435,41 @@ var STATS_OFFSET = {
     }
 };
 var POLL_OFFSET = {
-    SUBBAN: 435547,
-    WEBER: 224018
+    SUBBAN: 441169,
+    WEBER: 230171
 };
 
 $.when(
-    fetch (DATA_URL_SUBBAN_PLAYOFF),
-    fetch (DATA_URL_PLAYOFF_NASH),
+    // fetch (DATA_URL_SUBBAN_PLAYOFF),
+    // fetch (DATA_URL_PLAYOFF_NASH),
     fetch (DATA_URL_POLL)
-).done(function(a1, a2, a3){
-    var pollChoices = a3[0].demand[0].result.answers.answer;
+).done(function(a3){
+    var pollChoices = a3.demand[0].result.answers.answer;
     var votesSubban = pollChoices[0].total;
     var votesWeber = pollChoices[1].total;
     var pollLatest = mapPollToObject(votesSubban, votesWeber, POLL_OFFSET.SUBBAN, POLL_OFFSET.WEBER);
     var pollTotal = mapPollToObject(votesSubban, votesWeber, 0, 0);
 
     var latest = {
-        id : 'r2019',
-        name :  'PLAYOFFS 2019',
+        id : 'r2020',
+        name :  'REG. SEASON 2019-2020',
         isLatest: true,
-        isPlayoff: true,
+        isPlayoff: false,
         subban : {
-            stats: mapPlayerDataToArray(a1),
-            team:  mapLeaguePlayoffDataToObject(a2, 18),
+            stats: {
+                played: 0,
+                goals: 0,
+                assists: 0,
+                points: 0,
+                plusMinus: 0
+            },
+            team: {
+                wins: 0,
+                losses: 0,
+                otLosses: 0,
+                points: 0,
+                status: ''
+            },
             votes: ko.observable(pollLatest.subban.votes)
         },
         weber : {
@@ -427,7 +485,7 @@ $.when(
                 losses: 0,
                 otLosses: 0,
                 points: 0,
-                status: 'No Playoffs'
+                status: ''
             },
             votes: ko.observable(pollLatest.weber.votes)
         }
@@ -440,22 +498,22 @@ $.when(
         isPlayoff: false,
         subban : {
             stats: {
-                played: latest.subban.stats.played + STATS_OFFSET.SUBBAN.played,
-                goals: latest.subban.stats.goals + STATS_OFFSET.SUBBAN.goals,
-                assists: latest.subban.stats.assists + STATS_OFFSET.SUBBAN.assists,
-                points: latest.subban.stats.points + STATS_OFFSET.SUBBAN.points,
-                plusMinus: latest.subban.stats.plusMinus + STATS_OFFSET.SUBBAN.plusMinus
+                played: STATS_OFFSET.SUBBAN.played,
+                goals: STATS_OFFSET.SUBBAN.goals,
+                assists: STATS_OFFSET.SUBBAN.assists,
+                points: STATS_OFFSET.SUBBAN.points,
+                plusMinus: STATS_OFFSET.SUBBAN.plusMinus
             },
             team: {},
             votes: ko.observable(pollTotal.subban.votes)
         },
         weber : {
             stats: {
-                played: latest.weber.stats.played + STATS_OFFSET.WEBER.played,
-                goals: latest.weber.stats.goals + STATS_OFFSET.WEBER.goals,
-                assists: latest.weber.stats.assists + STATS_OFFSET.WEBER.assists,
-                points: latest.weber.stats.points + STATS_OFFSET.WEBER.points,
-                plusMinus: latest.weber.stats.plusMinus + STATS_OFFSET.WEBER.plusMinus
+                played: STATS_OFFSET.WEBER.played,
+                goals: STATS_OFFSET.WEBER.goals,
+                assists: STATS_OFFSET.WEBER.assists,
+                points: STATS_OFFSET.WEBER.points,
+                plusMinus: STATS_OFFSET.WEBER.plusMinus
             },
             team: {},
             votes: ko.observable(pollTotal.weber.votes)
