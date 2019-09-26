@@ -143,11 +143,15 @@ function StatsModel() {
                     losses: 4,
                     otLosses: '',
                     points: '',
-                    status: 'Round 1'
+                    status: 'Round 1',
+                    name: 'NSH'
                 },
                 votes: {
                     votes: 5622,
                     percent: 48
+                },
+                img: {
+                    url: 'static/img/pksubban-old.jpg'
                 }
             },
             weber : {
@@ -163,7 +167,8 @@ function StatsModel() {
                     losses: 0,
                     otLosses: '',
                     points: '',
-                    status: 'No Playoffs'
+                    status: 'No Playoffs',
+                    name: 'MTL'
                 },
                 votes: {
                     votes: 6153,
@@ -189,11 +194,15 @@ function StatsModel() {
                     losses: 29,
                     otLosses: 6,
                     points: 100,
-                    status: ''
+                    status: '',
+                    name: 'NSH'
                 },
                 votes: {
                     votes: 126150,
                     percent: 76
+                },
+                img: {
+                    url: 'static/img/pksubban-old.jpg'
                 }
             },
             weber : {
@@ -209,7 +218,8 @@ function StatsModel() {
                     losses: 30,
                     otLosses: 8,
                     points: 96,
-                    status: ''
+                    status: '',
+                    name: 'MTL'
                 },
                 votes: {
                     votes: 40605,
@@ -235,11 +245,15 @@ function StatsModel() {
                     losses: 4,
                     otLosses: '',
                     points: '',
-                    status: 'Round 2'
+                    status: 'Round 2',
+                    name: 'NSH'
                 },
                 votes: {
                     votes: 179459,
                     percent: 72
+                },
+                img: {
+                    url: 'static/img/pksubban-old.jpg'
                 }
             },
             weber : {
@@ -255,7 +269,8 @@ function StatsModel() {
                     losses: 0,
                     otLosses: '',
                     points: '',
-                    status: 'No Playoffs'
+                    status: 'No Playoffs',
+                    name: 'MTL'
                 },
                 votes: {
                     votes: 70481,
@@ -281,11 +296,15 @@ function StatsModel() {
                     losses: 18,
                     otLosses: 11,
                     points: 117,
-                    status: ''
+                    status: '',
+                    name: 'NSH'
                 },
                 votes: {
                     votes: 106234,
                     percent: 64
+                },
+                img: {
+                    url: 'static/img/pksubban-old.jpg'
                 }
             },
             weber : {
@@ -301,7 +320,8 @@ function StatsModel() {
                     losses: 40,
                     otLosses: 13,
                     points: 71,
-                    status: ''
+                    status: '',
+                    name: 'MTL'
                 },
                 votes: {
                     votes: 61001,
@@ -327,11 +347,15 @@ function StatsModel() {
                     losses: 4,
                     otLosses: '',
                     points: '',
-                    status: 'CUP FINAL'
+                    status: 'CUP FINAL',
+                    name: 'NSH'
                 },
                 votes: {
                     votes: 12271,
                     percent: 64
+                },
+                img: {
+                    url: 'static/img/pksubban-old.jpg'
                 }
             },
             weber : {
@@ -347,7 +371,8 @@ function StatsModel() {
                     losses: 4,
                     otLosses: '',
                     points: '',
-                    status: 'Round 1'
+                    status: 'Round 1',
+                    name: 'MTL'
                 },
                 votes: {
                     votes: 6870,
@@ -373,11 +398,15 @@ function StatsModel() {
                     losses: 29,
                     otLosses: 12,
                     points: 94,
-                    status: ''
+                    status: '',
+                    name: 'NSH'
                 },
                 votes: {
                     votes: 11433,
                     percent: 20
+                },
+                img: {
+                    url: 'static/img/pksubban-old.jpg'
                 }
             },
             weber : {
@@ -393,7 +422,8 @@ function StatsModel() {
                     losses: 26,
                     otLosses: 9,
                     points: 103,
-                    status: ''
+                    status: '',
+                    name: 'MTL'
                 },
                 votes: {
                     votes: 45061,
@@ -468,9 +498,13 @@ $.when(
                 losses: 0,
                 otLosses: 0,
                 points: 0,
-                status: ''
+                status: '',
+                name: 'NJD'
             },
-            votes: ko.observable(pollLatest.subban.votes)
+            votes: ko.observable(pollLatest.subban.votes),
+            img: {
+                url: 'static/img/pksubban.jpg'
+            }
         },
         weber : {
             stats: {
@@ -485,7 +519,8 @@ $.when(
                 losses: 0,
                 otLosses: 0,
                 points: 0,
-                status: ''
+                status: '',
+                name: 'MTL'
             },
             votes: ko.observable(pollLatest.weber.votes)
         }
@@ -505,7 +540,10 @@ $.when(
                 plusMinus: STATS_OFFSET.SUBBAN.plusMinus
             },
             team: {},
-            votes: ko.observable(pollTotal.subban.votes)
+            votes: ko.observable(pollTotal.subban.votes),
+            img: {
+                url: 'static/img/pksubban.jpg'
+            }
         },
         weber : {
             stats: {
