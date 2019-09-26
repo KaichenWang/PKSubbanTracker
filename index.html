@@ -51,11 +51,12 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
             <span class="icon-down"></span>
         </div>
     </div>
-    <section class="container" id="container-subban" data-player="subban">
+    <!-- ko with: selectedSeason -->
+    <section class="container" id="container-subban" data-player="subban" data-bind="style: { 'background-image': 'url('+subban.img.url+')' }">
         <div class="content">
             <h2>P.K. Subban</h2>
-            <div class="loader" data-bind="css: {'hidden': isDataLoaded }"></div>
-            <table class="stats hidden" id="stats-subban" data-bind="with: selectedSeason, css: {'hidden': !isDataLoaded }">
+            <div class="loader" data-bind="css: {'hidden': $parent.isDataLoaded }"></div>
+            <table class="stats hidden" id="stats-subban" data-bind="css: {'hidden': !$parent.isDataLoaded }">
                 <thead>
                     <tr>
                         <td>GP</td>
@@ -75,14 +76,14 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
                     </tr>
                 </tbody>
             </table>
-            <!-- ko if: selectedSeason().id !== 'total' -->
-                <h4 class="team" id="stats-nsh" data-bind="with: selectedSeason">
+            <!-- ko if: id !== 'total' -->
+                <h4 class="team" id="stats-nsh">
                     <span class="record" data-bind="text: isPlayoff ? subban.team.wins+'-'+subban.team.losses : subban.team.wins+'-'+subban.team.losses+'-'+subban.team.otLosses"></span>
-                    <span class="label before">NSH</span>
+                    <span class="label before" data-bind="text: subban.team.name">---</span>
                     <span class="points" data-bind="text: isPlayoff ? subban.team.status : subban.team.points+' PTS'"></span>
                 </h4>
             <!-- /ko -->
-            <div class="results" id="results-subban" data-bind="click: onClickVote, with: selectedSeason">
+            <div class="results" id="results-subban" data-bind="click: onClickVote">
                 <h3 class="button" id="vote-subban" data-bind="css: {'button--disabled': !isLatest && id !== 'total'}">
                     <div class="like"><span class="icon-like-left"></span></div>
                     <span class="vote-count" id="votes-subban" data-bind="text: isLatest || id === 'total'? subban.votes().votes : subban.votes.votes">0</span>
@@ -94,6 +95,7 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
             </div>
         </div>
     </section>
+    <!-- /ko -->
     <section class="container" id="container-weber" data-player="weber">
         <div class="content">
             <h2>Shea Weber</h2>
@@ -121,7 +123,7 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
             <!-- ko if: selectedSeason().id !== 'total' -->
                 <h4 class="team" id="stats-mtl" data-bind="with: selectedSeason">
                     <span class="record" data-bind="text: isPlayoff ? weber.team.wins+'-'+weber.team.losses : weber.team.wins+'-'+weber.team.losses+'-'+weber.team.otLosses"></span>
-                    <span class="label before">MTL</span>
+                    <span class="label before" data-bind="text: weber.team.name">---</span>
                     <span class="points" data-bind="text: isPlayoff ? weber.team.status : weber.team.points+' PTS'"></span>
                 </h4>
             <!-- /ko -->
@@ -152,6 +154,7 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
         <div class="fb-like" data-href="http://www.pksubbantracker.com/" data-layout="box_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
     </div>
 </section>
+<img style="display: none;" src="/static/img/pksubban-old.jpg">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js" type="text/javascript"></script>
 <script src="static/js/scripts.min.js" type="text/javascript"></script>
