@@ -508,11 +508,11 @@ $.when(
         isPlayoff: false,
         subban : {
             stats: {
-                played: STATS_OFFSET.SUBBAN.played,
-                goals: STATS_OFFSET.SUBBAN.goals,
-                assists: STATS_OFFSET.SUBBAN.assists,
-                points: STATS_OFFSET.SUBBAN.points,
-                plusMinus: STATS_OFFSET.SUBBAN.plusMinus
+                played: latest.subban.stats.played + STATS_OFFSET.SUBBAN.played,
+                goals: latest.subban.stats.goals + STATS_OFFSET.SUBBAN.goals,
+                assists: latest.subban.stats.assists + STATS_OFFSET.SUBBAN.assists,
+                points: latest.subban.stats.points + STATS_OFFSET.SUBBAN.points,
+                plusMinus: latest.subban.stats.plusMinus + STATS_OFFSET.SUBBAN.plusMinus
             },
             team: {},
             votes: ko.observable(pollTotal.subban.votes),
@@ -522,11 +522,11 @@ $.when(
         },
         weber : {
             stats: {
-                played: STATS_OFFSET.WEBER.played,
-                goals: STATS_OFFSET.WEBER.goals,
-                assists: STATS_OFFSET.WEBER.assists,
-                points: STATS_OFFSET.WEBER.points,
-                plusMinus: STATS_OFFSET.WEBER.plusMinus
+                played: latest.weber.stats.played + STATS_OFFSET.WEBER.played,
+                goals: latest.weber.stats.goals + STATS_OFFSET.WEBER.goals,
+                assists: latest.weber.stats.assists + STATS_OFFSET.WEBER.assists,
+                points: latest.weber.stats.points + STATS_OFFSET.WEBER.points,
+                plusMinus: latest.weber.stats.plusMinus + STATS_OFFSET.WEBER.plusMinus
             },
             team: {},
             votes: ko.observable(pollTotal.weber.votes)
@@ -637,4 +637,4 @@ function mapLeaguePlayoffDataToObject (json, teamId) {
             status: ''
         };
     }
-} 
+}  
