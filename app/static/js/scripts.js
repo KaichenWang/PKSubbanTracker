@@ -488,7 +488,7 @@ $.when(
         isPlayoff: false,
         subban : {
             stats: mapPlayerDataToArray(a1),
-            team: mapLeagueRegDataToArray(a3, 2, 18, 'NJD'),
+            team: mapLeagueRegDataToArray(a3, 0, 1, 'NJD'),
             votes: ko.observable(pollLatest.subban.votes),
             img: {
                 url: 'static/img/pksubban.jpg'
@@ -637,4 +637,4 @@ function mapLeaguePlayoffDataToObject (json, teamId) {
             status: ''
         };
     }
-}
+} 
