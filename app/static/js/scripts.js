@@ -444,7 +444,7 @@ var DATA_URL_SUBBAN_REGULAR = 'https://statsapi.web.nhl.com/api/v1/people/847405
 var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642');
 var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs';
 var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
-var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20182019';
+var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20192020';
 var DATA_URL_POLL = 'https://nhl-tracker-api.now.sh/poll';
 var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2019-04-01&endDate=2019-07-01&gameType=P&expand=schedule.game.seriesSummary,seriesSummary.series&teamId=18';
 var DATA_URL_PLAYOFF_MONT = DATA_URL_PLAYOFF_NASH.replace('18','8');
@@ -470,11 +470,12 @@ var POLL_OFFSET = {
 };
 
 $.when(
-    // fetch (DATA_URL_SUBBAN_PLAYOFF),
-    // fetch (DATA_URL_PLAYOFF_NASH),
+    fetch (DATA_URL_SUBBAN_REGULAR),
+    fetch (DATA_URL_WEBER_REGULAR),
+    fetch (DATA_URL_LEAGUE),
     fetch (DATA_URL_POLL)
-).done(function(a3){
-    var pollChoices = a3.demand[0].result.answers.answer;
+).done(function(a1, a2, a3, a4){
+    var pollChoices = a4[0].demand[0].result.answers.answer;
     var votesSubban = pollChoices[0].total;
     var votesWeber = pollChoices[1].total;
     var pollLatest = mapPollToObject(votesSubban, votesWeber, POLL_OFFSET.SUBBAN, POLL_OFFSET.WEBER);
@@ -486,42 +487,16 @@ $.when(
         isLatest: true,
         isPlayoff: false,
         subban : {
-            stats: {
-                played: 0,
-                goals: 0,
-                assists: 0,
-                points: 0,
-                plusMinus: 0
-            },
-            team: {
-                wins: 0,
-                losses: 0,
-                otLosses: 0,
-                points: 0,
-                status: '',
-                name: 'NJD'
-            },
+            stats: mapPlayerDataToArray(a1),
+            team: mapLeagueRegDataToArray(a3, 2, 18, 'NJD'),
             votes: ko.observable(pollLatest.subban.votes),
             img: {
                 url: 'static/img/pksubban.jpg'
             }
         },
         weber : {
-            stats: {
-                played: 0,
-                goals: 0,
-                assists: 0,
-                points: 0,
-                plusMinus: 0
-            },
-            team: {
-                wins: 0,
-                losses: 0,
-                otLosses: 0,
-                points: 0,
-                status: '',
-                name: 'MTL'
-            },
+            stats: mapPlayerDataToArray(a2),
+            team: mapLeagueRegDataToArray(a3, 1, 8, 'MTL'),
             votes: ko.observable(pollLatest.weber.votes)
         }
     };
@@ -592,7 +567,7 @@ function mapPlayerDataToArray (json) {
     };
 }
 
-function mapLeagueRegDataToArray (json, confIndex, teamId) {
+function mapLeagueRegDataToArray (json, confIndex, teamId, name) {
 
 
     var stats = json[0].records[confIndex].teamRecords;
@@ -605,7 +580,8 @@ function mapLeagueRegDataToArray (json, confIndex, teamId) {
         losses: record.losses,
         otLosses: record.ot,
         points: teamStats.points,
-        status: ''
+        status: '',
+        name: name
     };
 }
 
