@@ -124,7 +124,58 @@ $(".trigger-comments").click(function() {
  */
 
 function StatsModel() {
-    this.seasons = [        
+    this.seasons = [     
+        {
+            id : 'r2020',
+            name :  'REG. SEASON 2019-2020',
+            isLatest: false,
+            isPlayoff: false,
+            subban : {
+                stats: {
+                    played: 68,
+                    goals: 7,
+                    assists: 11,
+                    points: 18,
+                    plusMinus: -21
+                },
+                team: {
+                    wins: 28,
+                    losses: 29,
+                    otLosses: 12,
+                    points: 68,
+                    status: '',
+                    name: 'NJD'
+                },
+                votes: {
+                    votes: 15012,
+                    percent: 43
+                },
+                img: {
+                    url: 'static/img/pksubban.jpg'
+                }
+            },
+            weber : {
+                stats: {
+                    played: 65,
+                    goals: 15,
+                    assists: 21,
+                    points: 36,
+                    plusMinus: 8
+                },
+                team: {
+                    wins: 31,
+                    losses: 31,
+                    otLosses: 9,
+                    points: 71,
+                    status: '',
+                    name: 'MTL'
+                },
+                votes: {
+                    votes: 19850,
+                    percent: 57
+                }
+            }
+        },   
         {
             id : 'p2019',
             name :  'PLAYOFFS 2019',
@@ -445,9 +496,9 @@ var DATA_URL_WEBER_REGULAR = DATA_URL_SUBBAN_REGULAR.replace('8474056','8470642'
 var DATA_URL_SUBBAN_PLAYOFF = 'https://statsapi.web.nhl.com/api/v1/people/8474056/stats?stats=yearByYearPlayoffs';
 var DATA_URL_WEBER_PLAYOFF = DATA_URL_SUBBAN_PLAYOFF.replace('8474056','8470642');
 var DATA_URL_LEAGUE = 'https://statsapi.web.nhl.com/api/v1/standings?expand=standings.record,standings.team&season=20192020';
-var DATA_URL_POLL = 'https://nhl-tracker-api.now.sh/poll';
-var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2019-04-01&endDate=2019-07-01&gameType=P&expand=schedule.game.seriesSummary,seriesSummary.series&teamId=18';
-var DATA_URL_PLAYOFF_MONT = DATA_URL_PLAYOFF_NASH.replace('18','8');
+var DATA_URL_POLL = 'https://nhl-tracker-api.vercel.app/api/poll';
+var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate=2020-04-01&endDate=2019-12-01&gameType=P&expand=schedule.game.seriesSummary,seriesSummary.series&teamId=18';
+var DATA_URL_PLAYOFF_MONT = DATA_URL_PLAYOFF_NASH.replace('Id=18','Id=8');
 var STATS_OFFSET = {
     SUBBAN: {
         played: 252,
@@ -465,16 +516,15 @@ var STATS_OFFSET = {
     }
 };
 var POLL_OFFSET = {
-    SUBBAN: 441169,
-    WEBER: 230171
+    SUBBAN: 456181,
+    WEBER: 250021
 };
 
 $.when(
-    fetch (DATA_URL_SUBBAN_REGULAR),
-    fetch (DATA_URL_WEBER_REGULAR),
-    fetch (DATA_URL_LEAGUE),
+    fetch (DATA_URL_WEBER_PLAYOFF),
+    fetch (DATA_URL_PLAYOFF_MONT),
     fetch (DATA_URL_POLL)
-).done(function(a1, a2, a3, a4){
+).done(function(a2, a3, a4){
     var pollChoices = a4[0].demand[0].result.answers.answer;
     var votesSubban = pollChoices[0].total;
     var votesWeber = pollChoices[1].total;
@@ -482,13 +532,26 @@ $.when(
     var pollTotal = mapPollToObject(votesSubban, votesWeber, 0, 0);
 
     var latest = {
-        id : 'r2020',
-        name :  'REG. SEASON 2019-2020',
+        id : 'p2020',
+        name :  'PLAYOFFS 2020',
         isLatest: true,
-        isPlayoff: false,
+        isPlayoff: true,
         subban : {
-            stats: mapPlayerDataToArray(a1),
-            team: mapLeagueRegDataToArray(a3, 0, 1, 'NJD'),
+            stats: {
+                played: 0,
+                goals: 0,
+                assists: 0,
+                points: 0,
+                plusMinus: 0
+            },
+            team: {
+                wins: 0,
+                losses: 0,
+                otLosses: '',
+                points: '',
+                status: 'No Playoffs',
+                name: 'NJD'
+            },
             votes: ko.observable(pollLatest.subban.votes),
             img: {
                 url: 'static/img/pksubban.jpg'
@@ -496,7 +559,7 @@ $.when(
         },
         weber : {
             stats: mapPlayerDataToArray(a2),
-            team: mapLeagueRegDataToArray(a3, 1, 8, 'MTL'),
+            team: mapLeaguePlayoffDataToObject(a3, 8),
             votes: ko.observable(pollLatest.weber.votes)
         }
     };
@@ -625,7 +688,8 @@ function mapLeaguePlayoffDataToObject (json, teamId) {
             losses: record.losses,
             otLosses: 0,
             points: 0,
-            status: 'Round ' + latest.round.number
+            status: latest.round.number === 0 ? 'Qualifier' : 'Round ' + latest.round.number,
+            name: teamId === 8 ? 'MTL' : 'NJD'
         };
     }
     else {
