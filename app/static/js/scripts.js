@@ -501,18 +501,18 @@ var DATA_URL_PLAYOFF_NASH = 'https://statsapi.web.nhl.com/api/v1/schedule?startD
 var DATA_URL_PLAYOFF_MONT = DATA_URL_PLAYOFF_NASH.replace('Id=18','Id=8');
 var STATS_OFFSET = {
     SUBBAN: {
-        played: 252,
-        goals: 42,
-        assists: 112,
-        points: 154,
-        plusMinus: 15
+        played: 320,
+        goals: 49,
+        assists: 123,
+        points: 172,
+        plusMinus: -6
     },
     WEBER: {
-        played: 168,
-        goals: 38,
-        assists: 56,
-        points: 94,
-        plusMinus: 28
+        played: 233,
+        goals: 53,
+        assists: 77,
+        points: 130,
+        plusMinus: 36
     }
 };
 var POLL_OFFSET = {
@@ -521,11 +521,11 @@ var POLL_OFFSET = {
 };
 
 $.when(
-    fetch (DATA_URL_WEBER_PLAYOFF),
-    fetch (DATA_URL_PLAYOFF_MONT),
+    // fetch (DATA_URL_WEBER_PLAYOFF),
+    // fetch (DATA_URL_PLAYOFF_MONT),
     fetch (DATA_URL_POLL)
-).done(function(a2, a3, a4){
-    var pollChoices = a4[0].demand[0].result.answers.answer;
+).done(function(a4){
+    var pollChoices = a4.demand[0].result.answers.answer;
     var votesSubban = pollChoices[0].total;
     var votesWeber = pollChoices[1].total;
     var pollLatest = mapPollToObject(votesSubban, votesWeber, POLL_OFFSET.SUBBAN, POLL_OFFSET.WEBER);
@@ -558,8 +558,21 @@ $.when(
             }
         },
         weber : {
-            stats: mapPlayerDataToArray(a2),
-            team: mapLeaguePlayoffDataToObject(a3, 8),
+            stats: {
+                played: 10,
+                goals: 3,
+                assists: 2,
+                points: 5,
+                plusMinus: 3
+            },
+            team: {
+                wins: 2,
+                losses: 4,
+                otLosses: '',
+                points: '',
+                status: 'Round 1',
+                name: 'MTL'
+            },
             votes: ko.observable(pollLatest.weber.votes)
         }
     };
