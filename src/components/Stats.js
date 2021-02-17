@@ -18,17 +18,17 @@ import {
 
 import Card from './Card.js';
 
-function Stats() {
+function Stats(props) {
   const history = useHistory();
   const location = useLocation();
 
-  const [seasonId, setSeasonId] = useState();
+  const {
+    seasonId,
+    setSeasonId
+  } = props;
+
   const [players, setPlayers] = useState(PLAYERS);
   const [teams, setTeams] = useState(TEAMS);
-
-  const handleChange = (evt) => {
-    setSeasonId(evt.currentTarget.value);
-  };
 
   const seasonIdPrevious = usePrevious(seasonId);
   const paramPrevious = usePrevious(
@@ -94,17 +94,6 @@ function Stats() {
 
   return (
     <div className="Stats">
-      <header>
-        <select onChange={handleChange} value={seasonId}>
-          {SEASONS.map((season) => {
-            return (
-              <option key={season.id} value={season.id}>
-                {season.name}
-              </option>
-            );
-          })}
-        </select>
-      </header>
       {PLAYERS_ID.map((playerId) => {
         const player = players[playerId];
         return (
