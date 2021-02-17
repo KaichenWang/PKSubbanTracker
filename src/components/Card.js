@@ -1,23 +1,33 @@
+import React from 'react';
 import './Card.css';
 
 function Card(props) {
-  const playerStats = props.player.stats[props.seasonId];
-  const teamStats = props.team ? props.team?.stats[props.seasonId] : null;
+  const { player, team, seasonId } = props;
+  const playerStats = player.stats[seasonId];
+  const teamStats = team ? team.stats[seasonId] : null;
+
   return (
     <div className="card">
       <h1>
-        {props.player.firstName} {props.player.lastName}
+        {player.firstName} {player.lastName}
       </h1>
-      {props.team && teamStats && (
+      {seasonId !== 'total' && (
         <div>
-          <h2>
-            {props.team.location} {props.team.name}
-          </h2>
-          <span>{teamStats.win}-</span>
-          <span>{teamStats.loss}</span>
-          {!teamStats.isPlayoff && <span>-{teamStats.overtimeLoss}</span>}
-          {!teamStats.isPlayoff && <p>Points: {teamStats.points}</p>}
-          {teamStats.isPlayoff && <p>Round: {teamStats.round}</p>}
+          {teamStats && (
+            <React.Fragment>
+              <h2>
+                {team.location} {team.name}
+              </h2>
+              <span>{teamStats.win}-</span>
+              <span>{teamStats.loss}</span>
+              {teamStats.type === 'league' && (
+                <span>-{teamStats.overtimeLoss}</span>
+              )}
+              {teamStats.type === 'league' && <p>Points: {teamStats.points}</p>}
+              {teamStats.type === 'playoff' && <p>Round: {teamStats.round}</p>}
+            </React.Fragment>
+          )}
+          {!teamStats && <p>Loading...</p>}
         </div>
       )}
       {playerStats && (
@@ -41,7 +51,8 @@ function Card(props) {
             </tr>
           </tbody>
         </table>
-    )}
+      )}
+      {!playerStats && <p>Loading...</p>}
     </div>
   );
 }

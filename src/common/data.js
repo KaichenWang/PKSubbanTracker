@@ -1,3 +1,7 @@
+export const LATEST_SEASON_ID = '20202021';
+
+export const PLAYERS_ID = [8474056, 8470642];
+
 export const PLAYERS = {
   8474056: {
     firstName: 'P.K.',
@@ -19,7 +23,7 @@ export const PLAYERS = {
         points: 40,
         plusMinus: -8,
       },
-      '20162017-P': {
+      '20162017p': {
         teamId: 18,
         games: 22,
         goals: 2,
@@ -49,7 +53,7 @@ export const PLAYERS = {
         points: 42,
         plusMinus: 20,
       },
-      '20162017-P': {
+      '20162017p': {
         teamId: 8,
         games: 6,
         goals: 1,
@@ -75,15 +79,15 @@ export const TEAMS = {
         win: 47,
         loss: 26,
         overtimeLoss: 9,
-        isPlayoff: false,
+        type: 'league',
         round: null,
         points: 103,
       },
-      '20162017-P': {
+      '20162017p': {
         win: 2,
         loss: 4,
         overtimeLoss: null,
-        isPlayoff: true,
+        type: 'playoff',
         round: 1,
         points: null,
       },
@@ -97,15 +101,15 @@ export const TEAMS = {
         win: 41,
         loss: 29,
         overtimeLoss: 12,
-        isPlayoff: false,
+        type: 'league',
         round: null,
         points: 94,
       },
-      '20162017-P': {
+      '20162017p': {
         win: 2,
         loss: 4,
         overtimeLoss: null,
-        isPlayoff: true,
+        type: 'playoff',
         round: 4,
         points: null,
       },
@@ -119,7 +123,7 @@ export const SEASONS = [
     name: 'Regular season 2020-2021',
   },
   {
-    id: '20162017-P',
+    id: '20162017p',
     name: 'Playoffs 2016-2017',
   },
   {
@@ -131,5 +135,3 @@ export const SEASONS = [
     name: 'Totals since trade',
   },
 ];
-
-export const CURRENT_SEASON_ID = '20202021';
