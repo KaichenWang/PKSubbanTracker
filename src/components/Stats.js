@@ -1,69 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
 
-import {
-  SEASONS,
-  PLAYERS,
-  TEAMS,
-  LATEST_SEASON_ID,
-  PLAYERS_ID,
-} from '../common/data';
+import { PLAYERS, TEAMS, LATEST_SEASON_ID, PLAYERS_ID } from '../common/data';
 import {
   fetchPlayerData,
   fetchTeamsData,
   updatePlayerStats,
   updateTeamStats,
-  usePrevious,
 } from '../common/utilities';
 
 import Card from './Card.js';
 
 function Stats(props) {
-  const history = useHistory();
-  const location = useLocation();
-
-  const {
-    seasonId,
-    setSeasonId
-  } = props;
+  const { seasonId } = props;
 
   const [players, setPlayers] = useState(PLAYERS);
   const [teams, setTeams] = useState(TEAMS);
-
-  const seasonIdPrevious = usePrevious(seasonId);
-  const paramPrevious = usePrevious(
-    new URLSearchParams(location.search).get('season')
-  );
-
-  useEffect(() => {
-    /* Set param in url when season is selected */
-    if (seasonId === seasonIdPrevious) return;
-    const params = new URLSearchParams(location.search);
-    let param = params.get('season');
-    param = param ? param : LATEST_SEASON_ID;
-    if (seasonId === param) return;
-    params.delete('season');
-    if (seasonId !== LATEST_SEASON_ID) {
-      params.append('season', seasonId);
-    }
-    history.push({ search: params.toString() });
-  }, [seasonId, seasonIdPrevious, location, history]);
-
-  useEffect(() => {
-    /* Use url param to set selected season */
-    const param = new URLSearchParams(location.search).get('season');
-    if (param === paramPrevious) return;
-    if (param) {
-      const match = SEASONS.filter((season) => {
-        return season.id === param;
-      });
-      if (match.length > 0) {
-        setSeasonId(param);
-        return;
-      }
-    }
-    setSeasonId(LATEST_SEASON_ID);
-  }, [location, paramPrevious]);
 
   useEffect(() => {
     /* Fetch and set latest player and team data from server */

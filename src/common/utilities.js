@@ -78,3 +78,26 @@ export const usePrevious = (value) => {
   });
   return ref.current;
 };
+
+export const getUpdateType = (
+  paramPrevious,
+  paramCurrent,
+  statePrevious,
+  stateCurrent
+) => {
+  let type = null;
+  if (
+    paramPrevious !== paramCurrent &&
+    statePrevious === stateCurrent &&
+    paramCurrent !== stateCurrent
+  ) {
+    type = 'state';
+  } else if (
+    statePrevious !== stateCurrent &&
+    paramPrevious === paramCurrent &&
+    paramCurrent !== stateCurrent
+  ) {
+    type = 'param';
+  }
+  return type;
+};
