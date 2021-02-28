@@ -6,6 +6,7 @@ import { usePrevious, getUpdateType } from './common/utilities';
 import { useHistory, useLocation } from 'react-router-dom';
 import Stats from './components/Stats.js';
 import Comments from './components/Comments.js';
+import Select from './components/Select.js';
 
 function App() {
   const [seasonId, setSeasonId] = useState();
@@ -91,8 +92,12 @@ function App() {
 
   return (
     <div className="App">
-      <header>
-        <select onChange={handleChange} value={seasonId}>
+      <main className="App__main">
+        <Stats seasonId={seasonId} />
+      </main>
+
+      <div className="App__actions">
+        <Select onChange={handleChange} value={seasonId}>
           {SEASONS.map((season) => {
             return (
               <option key={season.id} value={season.id}>
@@ -100,10 +105,12 @@ function App() {
               </option>
             );
           })}
-        </select>
-      </header>
-      <Stats seasonId={seasonId} />
-      <button onClick={handleClick}>Show comments</button>
+        </Select>
+        <button onClick={handleClick}>
+          <span>Comments</span>
+        </button>
+      </div>
+
       <Comments
         commentsActive={commentsActive}
         setCommentsActive={setCommentsActive}

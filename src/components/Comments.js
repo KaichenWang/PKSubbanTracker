@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-
+import React from 'react';
 import { FacebookProvider, Comments as FacebookComments } from 'react-facebook';
+import './Comments.css';
 
 function Comments(props) {
   const { commentsActive, setCommentsActive } = props;

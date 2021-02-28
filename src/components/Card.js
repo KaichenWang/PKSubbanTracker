@@ -4,55 +4,69 @@ import './Card.css';
 function Card(props) {
   const { player, team, seasonId } = props;
   const playerStats = player.stats[seasonId];
-  const teamStats = team ? team.stats[seasonId] : null;
+  const teamStats = team?.stats[seasonId];
 
   return (
-    <div className="card">
-      <h1>
-        {player.firstName} {player.lastName}
-      </h1>
+    <div className="Card">
+      <img
+        src={`${process.env.PUBLIC_URL}/${player.id}_${team?.id}.jpg`}
+        alt={`${player.firstName} ${player.lastName}`}
+      ></img>
+      <div className="Card__content">
+        <h1 className="Card__title">
+          {player.firstName} {player.lastName}
+        </h1>
+        {playerStats && (
+          <table className="Card__table">
+            <thead>
+              <tr>
+                <th>GP</th>
+                <th>G</th>
+                <th>A</th>
+                <th>P</th>
+                <th>+/-</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{playerStats.games}</td>
+                <td>{playerStats.goals}</td>
+                <td>{playerStats.assists}</td>
+                <td>{playerStats.points}</td>
+                <td>{playerStats.plusMinus}</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+        {!playerStats && <p>Loading...</p>}
+      </div>
       {seasonId !== 'total' && (
-        <div>
+        <div className="Card__bubble">
           {teamStats && (
             <React.Fragment>
-              <h2>
-                {team.location} {team.name}
-              </h2>
-              <span>{teamStats.win}-</span>
-              <span>{teamStats.loss}</span>
+              <span>
+                {team.name}
+              </span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span>
+                <span>{teamStats.win}-</span>
+                <span>{teamStats.loss}</span>
+                {teamStats.type === 'league' && (
+                  <span>-{teamStats.overtimeLoss}</span>
+                )}
+              </span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               {teamStats.type === 'league' && (
-                <span>-{teamStats.overtimeLoss}</span>
+                <span>Points: {teamStats.points}</span>
               )}
-              {teamStats.type === 'league' && <p>Points: {teamStats.points}</p>}
-              {teamStats.type === 'playoff' && <p>Round: {teamStats.round}</p>}
+              {teamStats.type === 'playoff' && (
+                <span>Round: {teamStats.round}</span>
+              )}
             </React.Fragment>
           )}
           {!teamStats && <p>Loading...</p>}
         </div>
       )}
-      {playerStats && (
-        <table>
-          <thead>
-            <tr>
-              <th>GP</th>
-              <th>G</th>
-              <th>A</th>
-              <th>P</th>
-              <th>+/-</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{playerStats.games}</td>
-              <td>{playerStats.goals}</td>
-              <td>{playerStats.assists}</td>
-              <td>{playerStats.points}</td>
-              <td>{playerStats.plusMinus}</td>
-            </tr>
-          </tbody>
-        </table>
-      )}
-      {!playerStats && <p>Loading...</p>}
     </div>
   );
 }

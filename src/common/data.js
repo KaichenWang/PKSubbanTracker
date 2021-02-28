@@ -1,9 +1,8 @@
 export const LATEST_SEASON_ID = '20202021';
 
-export const PLAYERS_ID = [8474056, 8470642];
-
-export const PLAYERS = {
-  8474056: {
+export const PLAYERS = [
+  {
+    id: 8474056,
     firstName: 'P.K.',
     lastName: 'Subban',
     stats: {
@@ -33,12 +32,13 @@ export const PLAYERS = {
       },
     },
   },
-  8470642: {
+  {
+    id: 8470642,
     firstName: 'Shea',
     lastName: 'Weber',
     stats: {
       total: {
-        teamId: 1,
+        teamId: 8,
         games: 0,
         goals: 0,
         assists: 0,
@@ -63,15 +63,17 @@ export const PLAYERS = {
       },
     },
   },
-};
+];
 
-export const TEAMS = {
-  1: {
+export const TEAMS = [
+  {
+    id: 1,
     location: 'New Jersey',
     name: 'Devils',
     stats: {},
   },
-  8: {
+  {
+    id: 8,
     location: 'Montreal',
     name: 'Canadiens',
     stats: {
@@ -93,7 +95,8 @@ export const TEAMS = {
       },
     },
   },
-  18: {
+  {
+    id: 18,
     location: 'Nashville',
     name: 'Predators',
     stats: {
@@ -115,7 +118,7 @@ export const TEAMS = {
       },
     },
   },
-};
+];
 
 export const SEASONS = [
   {

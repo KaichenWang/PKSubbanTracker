@@ -10,6 +10,8 @@ import {
 
 import Card from './Card.js';
 
+import './Stats.css';
+
 function Stats(props) {
   const { seasonId } = props;
 
@@ -19,24 +21,27 @@ function Stats(props) {
   useEffect(() => {
     /* Fetch and set latest player and team data from server */
     async function setData() {
-      const updatedPlayers = Object.assign({}, PLAYERS);
-      const updatedTeams = Object.assign({}, TEAMS);
+      const updatedPlayers = [];
+      const updatedTeams = [];
       await Promise.all(
-        PLAYERS_ID.map(async (playerId) => {
-          updatedPlayers[playerId] = updatePlayerStats(
-            updatedPlayers[playerId],
-            await fetchPlayerData(playerId, LATEST_SEASON_ID)
+        players.map(async (player) => {
+          updatedPlayers.push(
+            updatePlayerStats(
+              player,
+              await fetchPlayerData(player.id, LATEST_SEASON_ID)
+            )
           );
         })
       );
       setPlayers(updatedPlayers);
       const teamData = await fetchTeamsData(LATEST_SEASON_ID);
-      PLAYERS_ID.forEach((playerId) => {
-        const teamId = updatedPlayers[playerId].stats[LATEST_SEASON_ID].teamId;
-        updatedTeams[teamId] = updateTeamStats(updatedTeams[teamId], {
-          id: LATEST_SEASON_ID,
-          stats: teamData[teamId],
-        });
+      teams.forEach((team) => {
+        updatedTeams.push(
+          updateTeamStats(team, {
+            id: LATEST_SEASON_ID,
+            stats: teamData[team.id],
+          })
+        );
       });
       setTeams(updatedTeams);
     }
@@ -45,17 +50,14 @@ function Stats(props) {
 
   return (
     <div className="Stats">
-      {PLAYERS_ID.map((playerId) => {
-        const player = players[playerId];
+      {players.map((player) => {
         return (
           <Card
-            key={playerId}
+            key={player.id}
             player={player}
-            team={
-              seasonId === 'total' || !player.stats[seasonId]
-                ? null
-                : teams[player.stats[seasonId].teamId]
-            }
+            team={teams.find(
+              (team) => team.id === player.stats[seasonId]?.teamId
+            )}
             seasonId={seasonId}
           ></Card>
         );
