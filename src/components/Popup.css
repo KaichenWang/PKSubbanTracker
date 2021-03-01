@@ -1,0 +1,45 @@
+.Popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--light);
+  transform: translateY(100%);
+  transition: transform 0.2s;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.Popup.active {
+  transform: translateY(0);
+}
+
+.Popup__footer {
+  padding: 1rem 2rem;
+  position: sticky;
+  bottom:0;
+  background-color: var(--dark-semi);
+  z-index: 1;
+  box-shadow: 0 1rem 1rem 0 var(--light);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Popup__content {
+  padding: 1rem 1.2rem;
+  flex-grow: 1;
+}
+
+@media only screen and (min-width: 768px)  {
+  .Popup {
+    transform: translateY(-100%);
+  }
+
+  .Popup__footer {
+    order: -1;
+    bottom: initial;
+    top: 0;
+  }
+}

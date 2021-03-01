@@ -57,10 +57,10 @@ function Card(props) {
               </span>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               {teamStats.type === 'league' && (
-                <span>Points: {teamStats.points}</span>
+                <span>{teamStats.points} Points</span>
               )}
               {teamStats.type === 'playoff' && (
-                <span>Round: {teamStats.round}</span>
+                <span>Round {teamStats.round}</span>
               )}
             </React.Fragment>
           )}

@@ -5,18 +5,21 @@
 }
 
 .Select__select {
-  background-color: var(--bg-dark);
+  background-color: var(--dark-semi);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding: 1rem 2rem;
-  padding: 1rem 2.5rem 1rem 1rem;
+  padding-left: 1rem;
+  padding-right: 2.5rem;
   outline: none;
-  border: 0.2rem solid var(--light);
+  border: 0.2rem solid var(--light-semi);
   border-radius: 0.5rem;
   font-size: inherit;
   color: inherit;
   width: 100%;
+  height: 4rem;
+  font-family: inherit;
+  text-transform: uppercase;
 }
 
 .Select__icon {

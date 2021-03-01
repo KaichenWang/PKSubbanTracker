@@ -123,7 +123,7 @@ export const TEAMS = [
 export const SEASONS = [
   {
     id: '20202021',
-    name: 'Regular season 2020-2021',
+    name: '2020-2021',
   },
   {
     id: '20162017p',
@@ -131,7 +131,7 @@ export const SEASONS = [
   },
   {
     id: '20162017',
-    name: 'Regular season 2016-2017',
+    name: '2016-2017',
   },
   {
     id: 'total',

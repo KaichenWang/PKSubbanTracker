@@ -2,10 +2,12 @@ import React from 'react';
 import './Select.css';
 
 function Select(props) {
-  const { children, onChange, value } = props;
+  const { children, onChange, value, id } = props;
+  const selectId = id ? id : '';
+
   return (
     <div className="Select">
-      <select className="Select__select" onChange={onChange} value={value}>
+      <select id={selectId} className="Select__select" onChange={onChange} value={value}>
         {children}
       </select>
       <svg className="Select__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.996 491.996">

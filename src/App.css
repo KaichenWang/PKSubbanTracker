@@ -1,29 +1,28 @@
 .App {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .App__main {
   height: 100%;
-  overflow: auto;
 }
 
 .App__actions {
-  background-color: #1c1c1c;
-  padding: 2rem;
+  background-color: var(--dark-semi);
+  padding: 1.5rem 2rem;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-}
-
-.App__actions > * {
-  width: 100%;
 }
 
 .App__actions > * + * {
-  margin-top: 2rem;
+  margin-left: 1rem;
 }
 
+@media only screen and (min-width: 768px)  {
+  .App__actions {
+    order: -1;
+  }
+}
