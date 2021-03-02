@@ -6,6 +6,7 @@
   position: relative;
   padding-left: 2rem;
   padding-right: 2rem;
+  width: 100%;
 }
 
 .Card > img {
@@ -33,7 +34,7 @@
 .Card__title {
   margin: 0;
   text-shadow: 0.1rem 0.1rem 2rem var(--dark);
-  font-size: 3.5rem;
+  font-size: 3.7rem;
   font-family: 'Archivo Black', sans-serif;
 }
 
@@ -67,10 +68,25 @@
   display: inline-flex;
 }
 
-@media only screen and (min-width: 768px)  {
+@media only screen and (min-width: 768px) {
   .Card__bubble {
     bottom: 2rem;
     width: auto;
     border-radius: 5rem;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .Card__title {
+    font-size: 6rem;
+  }
+
+  .Card__table th,
+  .Card__table td {
+    min-width: 8rem;
+  }
+
+  .Card__table td {
+    font-size: 3.8rem;
   }
 }

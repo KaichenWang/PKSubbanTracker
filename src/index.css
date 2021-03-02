@@ -12,7 +12,9 @@ body,
   width: 100%;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -65,8 +67,8 @@ button > svg {
 }
 
 *:focus {
-  box-shadow: 0 0 0 .4rem var(--accent);
-  outline: .4rem solid transparent;
+  box-shadow: 0 0 0 0.4rem var(--accent);
+  outline: 0.4rem solid transparent;
 }
 
 .visually-hidden {
@@ -77,4 +79,10 @@ button > svg {
   position: absolute;
   white-space: nowrap;
   width: 1px;
+}
+
+@media only screen and (min-width: 992px) {
+  body {
+    font-size: 2.4rem;
+  }
 }

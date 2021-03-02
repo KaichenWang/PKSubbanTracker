@@ -52,14 +52,15 @@ function Stats(props) {
     <div className="Stats">
       {players.map((player) => {
         return (
-          <Card
-            key={player.id}
-            player={player}
-            team={teams.find(
-              (team) => team.id === player.stats[seasonId]?.teamId
-            )}
-            seasonId={seasonId}
-          ></Card>
+          <div key={player.id} className="Stats__item">
+            <Card              
+              player={player}
+              team={teams.find(
+                (team) => team.id === player.stats[seasonId]?.teamId
+              )}
+              seasonId={seasonId}
+            ></Card>
+          </div>
         );
       })}
     </div>
