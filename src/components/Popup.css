@@ -2,12 +2,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   background-color: var(--light);
   transform: translateY(100%);
   transition: transform 0.2s, opacity 0s linear 0.2s;
-  overflow: auto;
   display: flex;
   flex-direction: column;
   opacity: 0;
@@ -20,19 +19,19 @@
 }
 
 .Popup__footer {
-  padding: 1rem 2rem;
-  position: sticky;
-  bottom:0;
+  padding: 1.5rem 2rem;
   background-color: var(--dark-semi);
   z-index: 1;
-  box-shadow: 0 1rem 1rem 0 var(--light);
   display: flex;
   justify-content: flex-end;
+  flex-shrink: 0;
 }
 
 .Popup__content {
-  padding: 1rem 1.2rem;
+  padding: 1.5rem 2rem;
   flex-grow: 1;
+  overflow: auto;
+  position: relative;
 }
 
 @media only screen and (min-width: 768px)  {
@@ -42,7 +41,5 @@
 
   .Popup__footer {
     order: -1;
-    bottom: initial;
-    top: 0;
   }
 }

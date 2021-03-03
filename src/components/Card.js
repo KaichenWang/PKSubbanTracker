@@ -1,6 +1,8 @@
 import React from 'react';
 import './Card.css';
 
+import Loader from './Loader.js';
+
 function Card(props) {
   const { player, team, seasonId } = props;
   const playerStats = player.stats[seasonId];
@@ -38,33 +40,24 @@ function Card(props) {
             </tbody>
           </table>
         )}
-        {!playerStats && <p>Loading...</p>}
+        {!playerStats && <Loader />}
       </div>
-      {seasonId !== 'total' && (
+      {seasonId !== 'total' && teamStats && (
         <div className="Card__bubble">
-          {teamStats && (
-            <React.Fragment>
-              <span>
-                {team.name}
-              </span>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span>
-                <span>{teamStats.win}-</span>
-                <span>{teamStats.loss}</span>
-                {teamStats.type === 'league' && (
-                  <span>-{teamStats.overtimeLoss}</span>
-                )}
-              </span>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              {teamStats.type === 'league' && (
-                <span>{teamStats.points} Points</span>
-              )}
-              {teamStats.type === 'playoff' && (
-                <span>Round {teamStats.round}</span>
-              )}
-            </React.Fragment>
+          <span>{team.name}</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <span>
+            <span>{teamStats.win}-</span>
+            <span>{teamStats.loss}</span>
+            {teamStats.type === 'league' && (
+              <span>-{teamStats.overtimeLoss}</span>
+            )}
+          </span>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          {teamStats.type === 'league' && (
+            <span>{teamStats.points} Points</span>
           )}
-          {!teamStats && <p>Loading...</p>}
+          {teamStats.type === 'playoff' && <span>Round {teamStats.round}</span>}
         </div>
       )}
     </div>

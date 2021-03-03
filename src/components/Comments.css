@@ -1,18 +1,32 @@
 .Comments {
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100%;
+  margin-left: -0.8rem;
+  margin-right: -0.8rem;
 }
 
 .Comments > * {
   width: 100%;
 }
 
+.Comments__loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  z-index: -1;
+}
+
+.Comments__content iframe {
+  background-color: var(--light);
+}
+
 @media only screen and (min-width: 768px)  {
   .Comments {
     max-width: 76.8rem;
     margin: auto;
-    height: 100%;
   }
 }
