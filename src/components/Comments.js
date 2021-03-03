@@ -6,9 +6,10 @@ import Popup from './Popup.js';
 import Loader from './Loader.js';
 
 function Comments(props) {
-  const { commentsActive, setCommentsActive } = props;
+  const { commentsActive, setCommentsActive, setFocus } = props;
   const handleClose = () => {
     setCommentsActive(!commentsActive);
+    setFocus.current.focus();
   };
 
   return (

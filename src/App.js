@@ -4,13 +4,27 @@ import './App.css';
 import { SEASONS, LATEST_SEASON_ID } from './common/data';
 import { usePrevious, getUpdateType } from './common/utilities';
 import { useHistory, useLocation } from 'react-router-dom';
+import ReactGA from 'react-ga';
+import { createBrowserHistory } from 'history';
+
 import Stats from './components/Stats.js';
 import Comments from './components/Comments.js';
 import Select from './components/Select.js';
 
+/* Google Analytics */
+const trackingId = 'UA-86116525-1'; // tracking ID
+ReactGA.initialize(trackingId);
+const history = createBrowserHistory();
+history.listen((location) => {
+  ReactGA.set({ page: location.pathname }); // Update the user's current page
+  ReactGA.pageview(location.pathname); // Record a pageview for the given page
+});
+
 function App() {
   const [seasonId, setSeasonId] = useState();
   const [commentsActive, setCommentsActive] = useState();
+
+  const buttonComments = React.createRef();
 
   const handleChange = (evt) => {
     setSeasonId(evt.currentTarget.value);
@@ -107,8 +121,10 @@ function App() {
             );
           })}
         </Select>
-        <label className="visually-hidden" htmlFor="SeasonId">Season</label>
-        <button onClick={handleClick}>
+        <label className="visually-hidden" htmlFor="SeasonId">
+          Season
+        </label>
+        <button onClick={handleClick} ref={buttonComments}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1.8rem"
@@ -123,6 +139,7 @@ function App() {
       <Comments
         commentsActive={commentsActive}
         setCommentsActive={setCommentsActive}
+        setFocus={buttonComments}
       />
     </div>
   );
