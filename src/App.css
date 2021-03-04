@@ -7,13 +7,16 @@
 }
 
 .App__main {
-  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: stretch;
 }
 
 .App__actions {
   background-color: var(--dark-semi);
-  padding: 1.5rem 2rem;
+  padding: 1rem 2rem;
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
 }
 
@@ -21,7 +24,7 @@
   margin-left: 1rem;
 }
 
-@media only screen and (min-width: 768px)  {
+@media only screen and (min-width: 768px) {
   .App__actions {
     order: -1;
   }

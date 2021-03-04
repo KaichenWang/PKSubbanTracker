@@ -21,21 +21,22 @@ function Stats(props) {
   useEffect(() => {
     /* Fetch and set latest player and team data from server */
     async function setData() {
-      const updatedPlayers = [];
+      const updatedPlayers = [...PLAYERS];
       const updatedTeams = [];
       await Promise.all(
-        players.map(async (player) => {
-          updatedPlayers.push(
-            updatePlayerStats(
-              player,
-              await fetchPlayerData(player.id, LATEST_SEASON_ID)
-            )
+        PLAYERS.map(async (player) => {
+          const i = updatedPlayers.findIndex(
+            (current) => player.id === current.id
+          );
+          updatedPlayers[i] = updatePlayerStats(
+            player,
+            await fetchPlayerData(player.id, LATEST_SEASON_ID)
           );
         })
       );
       setPlayers(updatedPlayers);
       const teamData = await fetchTeamsData(LATEST_SEASON_ID);
-      teams.forEach((team) => {
+      TEAMS.forEach((team) => {
         updatedTeams.push(
           updateTeamStats(team, {
             id: LATEST_SEASON_ID,
@@ -53,7 +54,7 @@ function Stats(props) {
       {players.map((player) => {
         return (
           <div key={player.id} className="Stats__item">
-            <Card              
+            <Card
               player={player}
               team={teams.find(
                 (team) => team.id === player.stats[seasonId]?.teamId
