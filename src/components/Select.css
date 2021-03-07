@@ -20,6 +20,12 @@
   height: 4.4rem;
   font-family: inherit;
   text-transform: uppercase;
+  cursor: pointer;
+  transition: border 0.2s;
+}
+
+.Select__select:hover {
+  border-color: var(--light);
 }
 
 .Select__icon {

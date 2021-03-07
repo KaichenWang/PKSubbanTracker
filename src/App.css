@@ -10,6 +10,8 @@
   flex-grow: 1;
   display: flex;
   justify-content: stretch;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .App__actions {

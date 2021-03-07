@@ -43,7 +43,7 @@ function Card(props) {
               </tbody>
             </table>
           )}
-          {!playerStats && <Loader />}
+          {!playerStats && <Loader inverse={true}/>}
         </div>
       )}
       {seasonId !== 'total' && teamStats && (

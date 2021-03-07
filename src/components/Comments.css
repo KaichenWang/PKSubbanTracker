@@ -23,6 +23,7 @@
 .Comments__content iframe {
   background-color: var(--light);
   width: 100% !important;
+  visibility: inherit !important;
 }
 
 @media only screen and (min-width: 768px)  {

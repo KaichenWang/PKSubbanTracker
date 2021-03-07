@@ -34,6 +34,7 @@ body {
   font-family: 'Saira Condensed', sans-serif;
   line-height: 1;
   text-transform: uppercase;
+  font-weight: normal;
 }
 
 button {
@@ -56,6 +57,7 @@ button {
   height: 4.4rem;
   font-family: inherit;
   text-transform: uppercase;
+  transition: border 0.2s;
 }
 
 button > * + * {
@@ -66,9 +68,23 @@ button > svg {
   fill: currentColor;
 }
 
+button:hover {
+  border-color: var(--light);
+}
+
+*:focus-visible {
+  box-shadow: 0 0 0 0.2rem var(--accent);
+  outline: 0.2rem solid transparent;
+}
+
 *:focus {
-  box-shadow: 0 0 0 0.3rem var(--accent);
-  outline: 0.3rem solid transparent;
+  box-shadow: 0 0 0 0.2rem var(--accent);
+  outline: 0.2rem solid transparent;
+}
+
+*:focus:not(:focus-visible) {
+  box-shadow: none;
+  outline: 0;
 }
 
 .visually-hidden {

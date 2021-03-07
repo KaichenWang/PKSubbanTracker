@@ -101,3 +101,21 @@ export const getUpdateType = (
   }
   return type;
 };
+
+export const trapFocusHandler = (container) => {
+  return (evt) => {
+    const focusableModalElements = container.querySelectorAll(
+      'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),iframe,[tabindex],[contentEditable=true]'
+    );
+    const firstElement = focusableModalElements[0];
+    const lastElement = focusableModalElements[focusableModalElements.length - 1];
+    if (evt.keyCode !== 9) return;
+    if (evt.shiftKey && document.activeElement === firstElement) {
+      evt.preventDefault();
+      lastElement.focus();
+    } else if (!evt.shiftKey && document.activeElement === lastElement) {
+      evt.preventDefault();
+      firstElement.focus();
+    }
+  };
+};

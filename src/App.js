@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import './App.css';
 
 import { SEASONS, LATEST_SEASON_ID } from './common/data';
@@ -24,7 +24,7 @@ function App() {
   const [seasonId, setSeasonId] = useState();
   const [commentsActive, setCommentsActive] = useState();
 
-  const buttonComments = React.createRef();
+  const buttonComments = createRef();
 
   const handleChange = (evt) => {
     setSeasonId(evt.currentTarget.value);
@@ -122,20 +122,24 @@ function App() {
           })}
         </Select>
         <label className="visually-hidden" htmlFor="SeasonId">
-          Season
+          Select season
         </label>
-        <button onClick={handleClick} ref={buttonComments}>
+        <button
+          aria-label="Open discussion"
+          onClick={handleClick}
+          ref={buttonComments}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1.8rem"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path d="M22 3v13h-11.643l-4.357 3.105v-3.105h-4v-13h20zm2-2h-24v16.981h4v5.019l7-5.019h13v-16.981zm-5 6h-14v-1h14v1zm0 2h-14v1h14v-1zm-6 3h-8v1h8v-1z" />
           </svg>
-          <span>Discussion</span>
+          <span aria-hidden="true">Discussion</span>
         </button>
       </div>
-
       <Comments
         commentsActive={commentsActive}
         setCommentsActive={setCommentsActive}

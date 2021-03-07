@@ -4,8 +4,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 5rem 2rem;
   width: 100%;
 }
 
@@ -33,9 +32,10 @@
 
 .Card__title {
   margin: 0;
-  text-shadow: 0.1rem 0.1rem 2rem var(--dark);
+  text-shadow: 0rem 0rem 1rem var(--dark);
   font-size: 3.7rem;
   font-family: 'Archivo Black', sans-serif;
+  font-weight: normal;
 }
 
 .Card__table {
