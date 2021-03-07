@@ -79,7 +79,7 @@ function App() {
       } else {
         params.set('season', stateCurrent);
       }
-      history.push({ search: params.toString() });
+      history.replace({ search: params.toString() });
     }
   }, [paramsPrevious, history, seasonId, seasonIdPrevious]);
 
