@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import './Comments.css';
 
-import Popup from './Popup.js';
-import Loader from './Loader.js';
+import Popup from '../Popup';
+import Loader from '../Loader';
 
 function Comments(props) {
   const { commentsActive, setCommentsActive, setFocus } = props;

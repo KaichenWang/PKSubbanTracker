@@ -7,9 +7,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 
-import Stats from './components/Stats.js';
-import Comments from './components/Comments.js';
-import Select from './components/Select.js';
+import Stats from './components/Stats';
+import Comments from './components/Comments';
+import Select from './components/Select';
 
 /* Google Analytics */
 const trackingId = 'UA-86116525-1'; // tracking ID

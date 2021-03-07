@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { PLAYERS, TEAMS, LATEST_SEASON_ID } from '../common/data';
+import { PLAYERS, TEAMS, LATEST_SEASON_ID } from '../../common/data';
 import {
   fetchPlayerData,
   fetchTeamsData,
   updatePlayerStats,
   updateTeamStats,
   sumPlayerTotals
-} from '../common/utilities';
+} from '../../common/utilities';
 
-import Card from './Card.js';
+import Card from '../Card';
 
 import './Stats.css';
 

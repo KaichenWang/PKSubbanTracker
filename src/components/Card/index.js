@@ -1,7 +1,7 @@
 import React from 'react';
 import './Card.css';
 
-import Loader from './Loader.js';
+import Loader from '../Loader';
 
 function Card(props) {
   const { player, team, seasonId } = props;

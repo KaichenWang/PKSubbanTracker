@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, createRef } from 'react';
+import React, { useEffect, createRef } from 'react';
 import './Popup.css';
 
-import { trapFocusHandler } from '../common/utilities';
+import { trapFocusHandler } from '../../common/utilities';
 
 function Popup(props) {
   const { children, isActive, handleClose, closeLabel } = props;
@@ -9,43 +9,6 @@ function Popup(props) {
   const modalRef = createRef();
   const contentRef = createRef();
   const closeRef = createRef();
-
-  // useEffect(() => {
-  //   function keyListener(e) {
-  //     const listener = keyListenersMap.get(e.keyCode);
-  //     return listener && listener(e);
-  //   }
-
-  //   const handleTabKey = (e) => {
-  //     const focusableModalElements = modalRef.current.querySelectorAll(
-  //       'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
-  //     );
-  //     const firstElement = focusableModalElements[0];
-  //     const lastElement =
-  //       focusableModalElements[focusableModalElements.length - 1];
-
-  //     if (!e.shiftKey && document.activeElement !== firstElement) {
-  //       firstElement.focus();
-  //       return e.preventDefault();
-  //     }
-
-  //     if (e.shiftKey && document.activeElement !== lastElement) {
-  //       lastElement.focus();
-  //       e.preventDefault();
-  //     }
-  //   };
-
-  //   const keyListenersMap = new Map([
-  //     [27, handleClose],
-  //     [9, handleTabKey],
-  //   ]);
-
-  //   if (isActive) {
-  //     document.addEventListener('keydown', keyListener);
-  //   } else {
-  //     return () => document.removeEventListener('keydown', keyListener);
-  //   }
-  // }, [isActive, handleClose, modalRef]);
 
   useEffect(() => {
     if (!modalRef.current) return;
