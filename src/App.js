@@ -21,6 +21,7 @@ history.listen((location) => {
 });
 
 function App() {
+  const [seasons, setSeasons] = useState(SEASONS);
   const [seasonId, setSeasonId] = useState();
   const [commentsActive, setCommentsActive] = useState();
 
@@ -32,6 +33,14 @@ function App() {
 
   const handleClick = () => {
     setCommentsActive(!commentsActive);
+  };
+
+  const handleError = () => {
+    const updatedSeasons = SEASONS.filter((season) => {
+      return season.id !== LATEST_SEASON_ID;
+    });
+    setSeasons(updatedSeasons);
+    setSeasonId(updatedSeasons[0]?.id);
   };
 
   const history = useHistory();
@@ -108,12 +117,12 @@ function App() {
   return (
     <div className="App">
       <main className="App__main">
-        <Stats seasonId={seasonId} />
+        <Stats seasonId={seasonId} handleError={handleError} />
       </main>
 
       <div className="App__actions">
         <Select onChange={handleChange} value={seasonId} id="SeasonId">
-          {SEASONS.map((season) => {
+          {seasons.map((season) => {
             return (
               <option key={season.id} value={season.id}>
                 {season.name}

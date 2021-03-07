@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import { PLAYERS, TEAMS, LATEST_SEASON_ID, PLAYERS_ID } from '../common/data';
+import { PLAYERS, TEAMS, LATEST_SEASON_ID } from '../common/data';
 import {
   fetchPlayerData,
   fetchTeamsData,
   updatePlayerStats,
   updateTeamStats,
+  sumPlayerTotals
 } from '../common/utilities';
 
 import Card from './Card.js';
@@ -13,45 +14,51 @@ import Card from './Card.js';
 import './Stats.css';
 
 function Stats(props) {
-  const { seasonId } = props;
 
-  const [players, setPlayers] = useState(PLAYERS);
+  const { seasonId, handleError } = props;
+  const [players, setPlayers] = useState();
   const [teams, setTeams] = useState(TEAMS);
 
   useEffect(() => {
+    const playersWithTotals = sumPlayerTotals(PLAYERS);
+    setPlayers(playersWithTotals);
     /* Fetch and set latest player and team data from server */
     async function setData() {
-      const updatedPlayers = [...PLAYERS];
-      const updatedTeams = [];
-      await Promise.all(
-        PLAYERS.map(async (player) => {
-          const i = updatedPlayers.findIndex(
-            (current) => player.id === current.id
-          );
-          updatedPlayers[i] = updatePlayerStats(
-            player,
-            await fetchPlayerData(player.id, LATEST_SEASON_ID)
-          );
-        })
-      );
-      setPlayers(updatedPlayers);
-      const teamData = await fetchTeamsData(LATEST_SEASON_ID);
-      TEAMS.forEach((team) => {
-        updatedTeams.push(
-          updateTeamStats(team, {
-            id: LATEST_SEASON_ID,
-            stats: teamData[team.id],
+      try {
+        const updatedPlayers = [...playersWithTotals];
+        const updatedTeams = [];
+        await Promise.all(
+          PLAYERS.map(async (player) => {
+            const i = updatedPlayers.findIndex(
+              (current) => player.id === current.id
+            );
+            updatedPlayers[i] = updatePlayerStats(
+              player,
+              await fetchPlayerData(player.id, LATEST_SEASON_ID)
+            );
           })
         );
-      });
-      setTeams(updatedTeams);
+        setPlayers(updatedPlayers);
+        const teamData = await fetchTeamsData(LATEST_SEASON_ID);
+        TEAMS.forEach((team) => {
+          updatedTeams.push(
+            updateTeamStats(team, {
+              id: LATEST_SEASON_ID,
+              stats: teamData[team.id],
+            })
+          );
+        });
+        setTeams(updatedTeams);
+      } catch (err) {
+        handleError();
+      }
     }
     setData();
   }, []);
 
   return (
     <div className="Stats">
-      {players.map((player) => {
+      {players && players.map((player) => {
         return (
           <div key={player.id} className="Stats__item">
             <Card

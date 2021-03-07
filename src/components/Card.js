@@ -43,25 +43,25 @@ function Card(props) {
               </tbody>
             </table>
           )}
-          {!playerStats && <Loader inverse={true}/>}
+          {!playerStats && <Loader inverse={true} />}
         </div>
       )}
       {seasonId !== 'total' && teamStats && (
         <div className="Card__bubble">
           <span>{team.name}</span>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-            <span>{teamStats.win}-</span>
-            <span>{teamStats.loss}</span>
-            {teamStats.type === 'league' && (
+          {teamStats.type === 'league' && (
+            <span>
+              <span>{teamStats.win}-</span>
+              <span>{teamStats.loss}</span>
               <span>-{teamStats.overtimeLoss}</span>
-            )}
-          </span>
-          &nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          )}
           {teamStats.type === 'league' && (
             <span>{teamStats.points} Points</span>
           )}
-          {teamStats.type === 'playoff' && <span>Round {teamStats.round}</span>}
+          {teamStats.type === 'playoff' && <span>{teamStats.round}</span>}
         </div>
       )}
     </div>

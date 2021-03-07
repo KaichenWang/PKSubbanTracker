@@ -108,7 +108,8 @@ export const trapFocusHandler = (container) => {
       'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),iframe,[tabindex],[contentEditable=true]'
     );
     const firstElement = focusableModalElements[0];
-    const lastElement = focusableModalElements[focusableModalElements.length - 1];
+    const lastElement =
+      focusableModalElements[focusableModalElements.length - 1];
     if (evt.keyCode !== 9) return;
     if (evt.shiftKey && document.activeElement === firstElement) {
       evt.preventDefault();
@@ -118,4 +119,22 @@ export const trapFocusHandler = (container) => {
       firstElement.focus();
     }
   };
+};
+
+export const sumPlayerTotals = (data) => {
+  const players = [...data];
+  players.forEach((player) => {
+    const total = player.stats['total'];
+    Object.keys(player.stats).forEach((seasonId) => {
+      if (seasonId !== 'total') {
+        const stat = player.stats[seasonId];
+        total.games += stat.games;
+        total.goals += stat.goals;
+        total.assists += stat.assists;
+        total.points += stat.points;
+        total.plusMinus += stat.plusMinus;
+      }
+    });
+  });
+  return players;
 };
