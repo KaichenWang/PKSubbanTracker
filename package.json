@@ -1,30 +1,40 @@
 {
-  "name": "pk-subban-tracker",
-  "version": "0.0.1",
-  "description": "Track PK Subban Stats",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "KCW",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/KaichenWang/PKSubbanTracker"
-  },
+  "name": "pksubbantracker",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "express": "latest",
-    "request": "latest",
-    "cheerio": "latest",
-    "redis": "0.6.7",
-    "xml2js ": "latest"
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-ga": "^3.3.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.2",
+    "web-vitals": "^1.0.1"
   },
-  "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-cssmin": "^2.2.1",
-    "grunt-contrib-less": "^1.4.1",
-    "grunt-contrib-uglify": "^3.3.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-express": "^1.4.1"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
