@@ -443,6 +443,10 @@ export const TEAMS = [
 
 export const SEASONS = [
   {
+    id: 'total',
+    name: 'Totals since trade',
+  },
+  {
     id: '20212022p',
     name: 'Playoffs 2022',
   },
@@ -489,9 +493,5 @@ export const SEASONS = [
   {
     id: '20162017',
     name: '2016-2017',
-  },
-  {
-    id: 'total',
-    name: 'Totals since trade',
-  },
+  }
 ];
