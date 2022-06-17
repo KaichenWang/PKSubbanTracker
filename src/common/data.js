@@ -1,4 +1,4 @@
-export const LATEST_SEASON_ID = '20202021';
+export const LATEST_SEASON_ID = 'total';
 
 export const PLAYERS = [
   {
@@ -6,13 +6,45 @@ export const PLAYERS = [
     firstName: 'P.K.',
     lastName: 'Subban',
     stats: {
-      total: {
+      'total': {
         teamId: 1,
         games: 0,
         goals: 0,
         assists: 0,
         points: 0,
         plusMinus: 0,
+      },
+      '20212022p': {
+        teamId: 1,
+        games: 0,
+        goals: 0,
+        assists: 0,
+        points: 0,
+        plusMinus: 0,
+      },
+      '20212022': {
+        teamId: 1,
+        games: 77,
+        goals: 5,
+        assists: 17,
+        points: 22,
+        plusMinus: -8,
+      },
+      '20202021p': {
+        teamId: 1,
+        games: 0,
+        goals: 0,
+        assists: 0,
+        points: 0,
+        plusMinus: 0,
+      },
+      '20202021': {
+        teamId: 1,
+        games: 44,
+        goals: 5,
+        assists: 14,
+        points: 19,
+        plusMinus: -16,
       },
       '20192020p': {
         teamId: 1,
@@ -22,7 +54,7 @@ export const PLAYERS = [
         points: 0,
         plusMinus: 0,
       },
-      20192020: {
+      '20192020': {
         teamId: 1,
         games: 68,
         goals: 7,
@@ -38,7 +70,7 @@ export const PLAYERS = [
         points: 3,
         plusMinus: -3,
       },
-      20182019: {
+      '20182019': {
         teamId: 18,
         games: 63,
         goals: 9,
@@ -54,7 +86,7 @@ export const PLAYERS = [
         points: 9,
         plusMinus: -2,
       },
-      20172018: {
+      '20172018': {
         teamId: 18,
         games: 82,
         goals: 16,
@@ -70,7 +102,7 @@ export const PLAYERS = [
         points: 12,
         plusMinus: 5,
       },
-      20162017: {
+      '20162017': {
         teamId: 18,
         games: 66,
         goals: 10,
@@ -85,13 +117,45 @@ export const PLAYERS = [
     firstName: 'Shea',
     lastName: 'Weber',
     stats: {
-      total: {
+      'total': {
         teamId: 8,
         games: 0,
         goals: 0,
         assists: 0,
         points: 0,
         plusMinus: 0,
+      },
+      '20212022p': {
+        teamId: 8,
+        games: 0,
+        goals: 0,
+        assists: 0,
+        points: 0,
+        plusMinus: 0,
+      },
+      '20212022': {
+        teamId: 8,
+        games: 0,
+        goals: 0,
+        assists: 0,
+        points: 0,
+        plusMinus: 0,
+      },
+      '20202021p': {
+        teamId: 8,
+        games: 22,
+        goals: 1,
+        assists: 5,
+        points: 6,
+        plusMinus: 4,
+      },
+      '20202021': {
+        teamId: 8,
+        games: 48,
+        goals: 6,
+        assists: 13,
+        points: 19,
+        plusMinus: -4,
       },
       '20192020p': {
         teamId: 8,
@@ -101,7 +165,7 @@ export const PLAYERS = [
         points: 5,
         plusMinus: 3,
       },
-      20192020: {
+      '20192020': {
         teamId: 8,
         games: 65,
         goals: 15,
@@ -117,7 +181,7 @@ export const PLAYERS = [
         points: 0,
         plusMinus: 0,
       },
-      20182019: {
+      '20182019': {
         teamId: 8,
         games: 58,
         goals: 14,
@@ -133,7 +197,7 @@ export const PLAYERS = [
         points: 0,
         plusMinus: 0,
       },
-      20172018: {
+      '20172018': {
         teamId: 8,
         games: 26,
         goals: 6,
@@ -149,7 +213,7 @@ export const PLAYERS = [
         points: 3,
         plusMinus: 1,
       },
-      20162017: {
+      '20162017': {
         teamId: 8,
         games: 78,
         goals: 17,
@@ -167,6 +231,38 @@ export const TEAMS = [
     location: 'New Jersey',
     name: 'Devils',
     stats: {
+      '20212022p': {
+        win: 0,
+        loss: 0,
+        overtimeLoss: null,
+        type: 'playoff',
+        round: 'No playoffs',
+        points: null,
+      },
+      '20212022': {
+        win: 27,
+        loss: 46,
+        overtimeLoss: 9,
+        type: 'league',
+        round: null,
+        points: 63,
+      },
+      '20202021p': {
+        win: 0,
+        loss: 0,
+        overtimeLoss: null,
+        type: 'playoff',
+        round: 'No playoffs',
+        points: null,
+      },
+      '20202021': {
+        win: 19,
+        loss: 30,
+        overtimeLoss: 7,
+        type: 'league',
+        round: null,
+        points: 45,
+      },
       '20192020p': {
         win: 0,
         loss: 0,
@@ -175,7 +271,7 @@ export const TEAMS = [
         round: 'No playoffs',
         points: null,
       },
-      20192020: {
+      '20192020': {
         win: 28,
         loss: 29,
         overtimeLoss: 12,
@@ -190,6 +286,38 @@ export const TEAMS = [
     location: 'Montreal',
     name: 'Canadiens',
     stats: {
+      '20212022p': {
+        win: 0,
+        loss: 0,
+        overtimeLoss: null,
+        type: 'playoff',
+        round: 'No playoffs',
+        points: null,
+      },
+      '20212022': {
+        win: 22,
+        loss: 49,
+        overtimeLoss: 11,
+        type: 'league',
+        round: null,
+        points: 55,
+      },
+      '20202021p': {
+        win: 13,
+        loss: 9,
+        overtimeLoss: null,
+        type: 'playoff',
+        round: 'CUP FINAL',
+        points: null,
+      },
+      '20202021': {
+        win: 24,
+        loss: 21,
+        overtimeLoss: 11,
+        type: 'league',
+        round: null,
+        points: 59,
+      },
       '20192020p': {
         win: 2,
         loss: 4,
@@ -198,7 +326,7 @@ export const TEAMS = [
         round: 'Round 1',
         points: null,
       },
-      20192020: {
+      '20192020': {
         win: 28,
         loss: 29,
         overtimeLoss: 12,
@@ -214,7 +342,7 @@ export const TEAMS = [
         round: 'No playoffs',
         points: null,
       },
-      20182019: {
+      '20182019': {
         win: 44,
         loss: 30,
         overtimeLoss: 8,
@@ -230,7 +358,7 @@ export const TEAMS = [
         round: 'No playoffs',
         points: null,
       },
-      20172018: {
+      '20172018': {
         win: 29,
         loss: 40,
         overtimeLoss: 13,
@@ -246,7 +374,7 @@ export const TEAMS = [
         round: 'Round 1',
         points: null,
       },
-      20162017: {
+      '20162017': {
         win: 47,
         loss: 26,
         overtimeLoss: 9,
@@ -269,7 +397,7 @@ export const TEAMS = [
         round: 'Round 1',
         points: null,
       },
-      20182019: {
+      '20182019': {
         win: 47,
         loss: 29,
         overtimeLoss: 6,
@@ -285,7 +413,7 @@ export const TEAMS = [
         round: 'Round 2',
         points: null,
       },
-      20172018: {
+      '20172018': {
         win: 53,
         loss: 18,
         overtimeLoss: 11,
@@ -301,7 +429,7 @@ export const TEAMS = [
         round: 'CUP FINAL',
         points: null,
       },
-      20162017: {
+      '20162017': {
         win: 41,
         loss: 29,
         overtimeLoss: 12,
@@ -314,6 +442,18 @@ export const TEAMS = [
 ];
 
 export const SEASONS = [
+  {
+    id: '20212022p',
+    name: 'Playoffs 2022',
+  },
+  {
+    id: '20212022',
+    name: '2021-2022',
+  },
+  {
+    id: '20202021p',
+    name: 'Playoffs 2021',
+  },
   {
     id: '20202021',
     name: '2020-2021',

@@ -53,7 +53,7 @@ function Stats(props) {
         handleError();
       }
     }
-    setData();
+    // setData();
   }, []);
 
   return (
