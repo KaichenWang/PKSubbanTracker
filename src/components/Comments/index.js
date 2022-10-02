@@ -10,7 +10,7 @@ function Comments(props) {
     setCommentsActive(!commentsActive);
     setFocus.current.focus();
   };
-
+  
   useEffect(() => {
     const init = () => {
       const js = window.document.createElement('script');
@@ -19,7 +19,7 @@ function Comments(props) {
       js.defer = true;
       js.crossOrigin = 'anonymous';
       js.src =
-        'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0&appId=1825083474401640';
+        'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v15.0&appId=1825083474401640';
       window.document.body.appendChild(js);
     };
     init();
